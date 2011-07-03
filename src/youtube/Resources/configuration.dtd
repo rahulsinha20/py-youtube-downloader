@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='windows-1252'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/configuration.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE App-Settings SYSTEM "configuration.dtd">
+
+    <App-Settings>
+    ...
+    </App-Settings>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT App-Settings (library-location)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT library-location (#PCDATA|vlc-location)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT vlc-location (#PCDATA)>
