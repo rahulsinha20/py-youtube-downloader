@@ -581,6 +581,8 @@ class StartMainWidget(QtGui.QMainWindow):
         '''
         self.log.info("Quitting")
         #Over here log all information in a log file
+        if not os.path.exists('./Logs'):
+            os.makedirs('./Logs')
         logFile = open('./Logs/LogFile.txt', 'a')
         logFile.write(self.loggingHandler.getLoggingCompleteText())
         logFile.close()
