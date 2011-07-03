@@ -1,0 +1,21 @@
+MSVCP80.dll Not found error
+Add: ptions = {
+        "py2exe": {
+            "dll_excludes": ["MSVCP90.dll"]
+        }
+    },
+    
+REFER: http://stackoverflow.com/questions/323424/py2exe-fails-to-generate-an-executable
+
+(2) JPEG,ICO, other image formats not rendered in the app
+py2exe does not bundle the <dist> with image processing capabilities apart from PNG!
+and as such we need to move the following dlls from:
+qgif4.dll
+qico4.dll
+qjpeg4.dll
+qmng4.dll
+qsvg4.dll
+qtiff4.dll
+<Python Folder>/Lib/site-packages/PyQt4/plugins/imageformats
+copy the folder <imageformats> and place it within the <dist> folder
+Now the application should be able to render all the images

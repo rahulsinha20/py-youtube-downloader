@@ -1,0 +1,6 @@
+Compiled with Python 2.6 (17/11/10)
+Also tested to work with Python 2.7
+PyQt 4.8 for Python 2.6
+
+To allow plugins to be imported Mozilla Firefox is required with Adobe Flash Player installed
+VLC 1.1.5

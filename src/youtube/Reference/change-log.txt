@@ -1,0 +1,30 @@
+28-02-2010
+(1) Implementation of a Video class to store video details
+(2) Videos are now assigned a number which is useful with QNetworkAccessManager
+As with this method the calls are not blocked. And so while receiving images back, we should be knowing
+on which widget this has to be placed. This is looked up by matching the URL retrieved
+with the array of video objects and this allows to have matching attributes i.e thumbnail image matches with title etc
+This solves previous problem when the thumbs dont match with their titles etc. This was
+only because of the fact that asynchronous networkAccessManager class returns the image data as and when the links
+are downloaded and on the UI we had used a normal counter .i.e the counter was not associated with the image downloaded
+and hence confusion!
+
+24-02-2010
+(1) Using Trueveo web services - now the search returns double the results!
+31-09-2010
+(1)Added Logging facility
+
+17-11-2010
+(1) Added Code Analyzer - Pylint
+	Requirements:
+		logilab-common
+		logilab-astng
+		
+	Refernce:http://wiki.massgate.net/Tutorial_1:_Advanced_Modding_Techniques_and_Workflow#Installing_Python_and_PyLint 
+		   	http://lab.usgin.org/groups/etl-debug-blog/debugging-python-scripts-pylint
+		   	
+02/12/10
+Added Progress bars while searching and downloading
+
+06/12/10
+Added support for (1) DailyMotion (2) Metacafe (3) Photobucket	
