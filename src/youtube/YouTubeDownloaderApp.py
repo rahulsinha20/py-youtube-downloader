@@ -52,8 +52,9 @@ class StartMainWidget(QtGui.QMainWindow):
         if returnCode == -1:
             #No Configuration file found
             self.showSettingsDialogSlot()
-        #Upload video library listing
-        self.updateVideoLibrary()
+        else:
+            #Upload video library listing
+            self.updateVideoLibrary()
         self.videoList = {}
         #Signal for double clicking (playback) a video track from library
         QtCore.QObject.connect(self.ui.treeWidget, QtCore.SIGNAL("itemDoubleClicked(QTreeWidgetItem*,int)"), self.playVideo)
