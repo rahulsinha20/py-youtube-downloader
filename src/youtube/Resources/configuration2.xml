@@ -1,7 +1,0 @@
-<?xml version="1.0" ?>
-<App-Settings>
-	<library-location>
-		c:/videos
-		<vlc-location>C:/Program Files (x86)/VideoLAN2/VLC/vlc.exe</vlc-location>
-	</library-location>
-</App-Settings>
