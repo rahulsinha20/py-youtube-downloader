@@ -319,7 +319,10 @@ class StartMainWidget(QtGui.QMainWindow):
         self.ui.treeWidget.setColumnCount(1)
         rootItem = QtGui.QTreeWidgetItem(QtCore.QStringList("Video Library"))
         rootItem.setIcon(0, QtGui.QIcon('./resources/root.gif'))
-        self.getFilesInDirectory(self.libraryPath, rootItem)
+        try:
+            self.getFilesInDirectory(self.libraryPath, rootItem)
+        except:
+             self.showSettingsDialogSlot()
         self.ui.treeWidget.addTopLevelItem(rootItem)
         #Expand all nodes from the root
         self.ui.treeWidget.expandAll()
@@ -400,8 +403,12 @@ class StartMainWidget(QtGui.QMainWindow):
         '''
         Returns files in the directory
         '''
-        
-        dirList = os.listdir(folderName)
+        try:
+            dirList = os.listdir(folderName)
+        except:
+            #There is some issue in accessing this path, mostly if the folder was deleted and the config hasnt been updated
+            #Show the settings dialog
+            raise Exception
         for fname in dirList:
             self.log.info(fname)                        
             #Check if this is a directory -http://forums.devshed.com/python-programming-11/recursive-file-search-for-given-extension-519562.html
