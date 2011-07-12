@@ -19,11 +19,13 @@ class PropertiesAccessor(object):
         self.propertiesFile = propertiesFile
         self.libraryPath = ''
         self.vlcPath = ''
+        self.MediaPlayerEnabled = ''
         #Constants
+        self.MEDIAPLAYERENABLED = 'mediaplayer-enabled'
         self.LIBRARY_LOCATION = "library-location"
         self.VLC_LOCATION = "vlc-location"
         
-    def write(self, libraryLocation, vlcLocation):
+    def write(self, libraryLocation, vlcLocation, mediaplayerEnabled="true"):
         '''
         This is where we dump the app configurations
         into an xml file
@@ -42,13 +44,24 @@ class PropertiesAccessor(object):
         #Append this as a child to library location node
         libNode.appendChild(libLocationTextNode)
         
+        # Create a new node to store mediaplayer-enabled
+        mediaplayerenabledNode=doc.createElement('mediaplayer-enabled')
+        libNode.appendChild(mediaplayerenabledNode)
+        #Create a text node to store the value
+        mediaplayerEnabledTextNode = doc.createTextNode(mediaplayerEnabled)
+        #Add this as a child to the upper node
+        mediaplayerenabledNode.appendChild(mediaplayerEnabledTextNode)
+        
         #Create a node to store VLC location
         vlcLocationNode = doc.createElement('vlc-location')
-        libNode.appendChild(vlcLocationNode)
+        mediaplayerenabledNode.appendChild(vlcLocationNode)
         #Create a text node to store the value
         vlcLocationTextNode = doc.createTextNode(vlcLocation)
         #Add this as a child to the VLC location node
         vlcLocationNode.appendChild(vlcLocationTextNode)
+        
+
+        
         #Now write this to a file in write mode - also erases previous settings
         xmlFileObject = open(self.propertiesFile, "w")
         doc.writexml(xmlFileObject)
@@ -83,9 +96,16 @@ class PropertiesAccessor(object):
                     self.vlcPath = e.nodeValue
                     print e.nodeValue
                     continue
+                elif(e.parentNode.tagName == self.MEDIAPLAYERENABLED):
+                    self.MediaPlayerEnabled = e.nodeValue
                 print e.nodeValue
             self.__readXml(e)
-        
+    def getMediaPlayerEnabled(self):
+        '''
+        Returns if media player is enabled
+        '''    
+        return self.MediaPlayerEnabled
+    
     def getLibraryPath(self):
         '''
         Return the parsed library path
