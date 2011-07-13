@@ -402,8 +402,8 @@ class StartMainWidget(QtGui.QMainWindow):
             #Change the icon for this node indicating it is queued
             self.sender().currentItem().setIcon(0, QtGui.QIcon(QtCore.QString("./resources/playVideo.gif")))
             #Begin Playback
-            VlcPlayer(completePath, self.vlcPath)
-   
+            VlcPlayer(self,completePath, self.vlcPath)
+            
 #    def addDirectLinkSlot(self):
 #            #also create a new row
 #            self.ui.textEdit_2.insertRow(1)
