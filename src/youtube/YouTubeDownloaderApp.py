@@ -306,6 +306,12 @@ class StartMainWidget(QtGui.QMainWindow):
             path = str(folderNames.takeAt(0))
             self.log.info('Library Location:' + path)
         return path
+    def setEmbeddedVideosState(self, value):
+        '''
+        This sets whether embedded videos are enabled. If yes, videos are shown on the interface
+        otherwise invokes the default browser
+        '''
+        self.ui.UpdateEmbeddedVideoState(value)
     
     def updateVideoLibrary(self):
         '''
@@ -602,11 +608,9 @@ class StartMainWidget(QtGui.QMainWindow):
         self.flushBeforeExit()        
         myapp.close()    
                                      
-    def openBrowser(self):
+    def openBrowser(self, link):
         '''This opens the default browser with the video as requested'''
-        videoIndex = int((self.ui.lineEdit_2).text())
-        videoIndex = videoIndex - 1
-        webbrowser.open(str(self.ui.webPageUrl[videoIndex]))
+        webbrowser.open(link)
 
     def convertTimeInSec(self, sec):
         '''This converts given time in seconds into hrs,mins and sec'''

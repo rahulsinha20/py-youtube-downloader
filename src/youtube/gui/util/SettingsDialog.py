@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\dev\SettingsDialog.ui'
+# Form implementation generated from reading ui file 'SettingsDialog.ui'
 #
-# Created: Tue Jul 12 15:03:14 2011
+# Created: Wed Jul 13 11:44:35 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -23,12 +23,12 @@ class Ui_Dialog(QtGui.QDialog):
         self.parentApp = parent
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(536, 274)
+        Dialog.resize(536, 325)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/newPrefix/icon.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Dialog.setWindowIcon(icon)
         self.buttonBox = QtGui.QDialogButtonBox(Dialog)
-        self.buttonBox.setGeometry(QtCore.QRect(160, 240, 171, 32))
+        self.buttonBox.setGeometry(QtCore.QRect(150, 290, 171, 32))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
@@ -106,6 +106,17 @@ class Ui_Dialog(QtGui.QDialog):
         self.checkBox.setFont(font)
         self.checkBox.setTristate(False)
         self.checkBox.setObjectName(_fromUtf8("checkBox"))
+        self.label_7 = QtGui.QLabel(Dialog)
+        self.label_7.setGeometry(QtCore.QRect(10, 240, 521, 31))
+        self.label_7.setObjectName(_fromUtf8("label_7"))
+        self.checkBox_2 = QtGui.QCheckBox(Dialog)
+        self.checkBox_2.setGeometry(QtCore.QRect(40, 270, 401, 17))
+        font = QtGui.QFont()
+        font.setWeight(75)
+        font.setBold(True)
+        self.checkBox_2.setFont(font)
+        self.checkBox_2.setObjectName(_fromUtf8("checkBox_2"))
+
         #Populate Values from XML
         self.readValuesFromXml()
         #Slots
@@ -129,7 +140,7 @@ class Ui_Dialog(QtGui.QDialog):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600; color:#0000ff;\">Library Path: </span><span style=\" font-size:10pt; color:#ff0000;\">Please select a folder that the application will use to download your videos.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600; color:#0000ff;\">Library Path: </span><span style=\" font-size:10pt; color:#ff0000;\">Please select a folder that the application will use to download your videos</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -140,7 +151,7 @@ class Ui_Dialog(QtGui.QDialog):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600; color:#0000ff;\">Media Player: </span><span style=\" font-size:10pt; color:#ff0000;\">Please select your default video player.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600; color:#0000ff;\">Media Player: </span><span style=\" font-size:10pt; color:#ff0000;\">Please select your default video player</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setText(QtGui.QApplication.translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -153,7 +164,12 @@ class Ui_Dialog(QtGui.QDialog):
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600; color:#ff0000;\">Configuration Editor</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.checkBox.setText(QtGui.QApplication.translate("Dialog", "No thanks, I will manage them myself", None, QtGui.QApplication.UnicodeUTF8))
-
+        self.label_7.setText(QtGui.QApplication.translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600; color:#0000ff;\">Embedded Player: </span><span style=\" font-size:10pt; color:#ff0000;\">Videos can be embedded in the application or played on the browser</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox_2.setText(QtGui.QApplication.translate("Dialog", "Disabled. This will use your default browser to view videos", None, QtGui.QApplication.UnicodeUTF8))
     def checkBoxSlot(self, state):
         '''
         Slot for checkbox - once selected it disables media player availability to the app
@@ -163,25 +179,31 @@ class Ui_Dialog(QtGui.QDialog):
             self.pushButton_2.setEnabled(False)
         else:
             self.lineEdit_2.setEnabled(True)
-            self.pushButton_2.setEnabled(True)
+            self.pushButton_2.setEnabled(True)            
+            
     def okButton(self):
         '''
         This is where we write the configs in an xml
         '''
         properties = youtube.util.xml.PropertiesAccessor.PropertiesAccessor()
-        #get state for medi player enabled
+        #get state for media player enabled
         if self.checkBox.checkState()==2:
             self.mediaPlayerEnabled = 'false'
         else:
             self.mediaPlayerEnabled = 'true';
-        properties.write(str(self.lineEdit.text()), str(self.lineEdit_2.text()), self.mediaPlayerEnabled)
+        #get state for embedded player
+        if self.checkBox_2.checkState()==2:
+            self.embeddedPlayerEnabled = 'false'
+        else:
+            self.embeddedPlayerEnabled = 'true'
+        properties.write(str(self.lineEdit.text()), str(self.lineEdit_2.text()), self.mediaPlayerEnabled, self.embeddedPlayerEnabled)
         #Cal the parent APp- which is AudioDownloaderApp as referenced by MainWIndow in the View
         #It then calls a mutator to change the library path and then reloads the library
         
         self.parentApp.setLibraryPath(str(self.lineEdit.text()))
         self.parentApp.setVlcPath(str(self.lineEdit_2.text()))
         self.parentApp.updateVideoLibrary()
-        
+        self.parentApp.setEmbeddedVideosState(self.embeddedPlayerEnabled)
         self.accept()
     def readValuesFromXml(self):
         '''
@@ -201,6 +223,12 @@ class Ui_Dialog(QtGui.QDialog):
             self.checkBox.setChecked(True)
             self.pushButton_2.setEnabled(False)
             self.lineEdit_2.setEnabled(False)
+        #Check settings for embedded videos
+        if properties.getEmbeddedVideosEnabled()=='true':
+            self.checkBox_2.setChecked(False)
+        else:
+            self.checkBox_2.setChecked(True)
+        
     def browseForLibLocation(self):
         location = self.browseForFiles("Select Library Location", True)
         self.lineEdit.setText(location)
@@ -224,4 +252,5 @@ class Ui_Dialog(QtGui.QDialog):
             path = str(folderNames.takeAt(0))
             print 'Library Location:', path
         return path
+
 import SettingsResources_rc

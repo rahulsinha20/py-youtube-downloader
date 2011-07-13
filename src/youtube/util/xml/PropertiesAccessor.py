@@ -20,12 +20,13 @@ class PropertiesAccessor(object):
         self.libraryPath = ''
         self.vlcPath = ''
         self.MediaPlayerEnabled = ''
+        self.embeddedVideosEnabled = ''
         #Constants
         self.MEDIAPLAYERENABLED = 'mediaplayer-enabled'
         self.LIBRARY_LOCATION = "library-location"
         self.VLC_LOCATION = "vlc-location"
-        
-    def write(self, libraryLocation, vlcLocation, mediaplayerEnabled="true"):
+        self.EMBEDDEDVIDEOSENABLED = 'embedded-videos-enabled'
+    def write(self, libraryLocation, vlcLocation, mediaplayerEnabled="true", embeddedVidsEnabled = "true"):
         '''
         This is where we dump the app configurations
         into an xml file
@@ -59,6 +60,14 @@ class PropertiesAccessor(object):
         vlcLocationTextNode = doc.createTextNode(vlcLocation)
         #Add this as a child to the VLC location node
         vlcLocationNode.appendChild(vlcLocationTextNode)
+        
+        #Create a node to indicated if embedded videos are allowed
+        embeddedVideosEnabledNode = doc.createElement('embedded-videos-enabled')
+        vlcLocationNode.appendChild(embeddedVideosEnabledNode)
+        #Create a text node to store the value
+        embeddedVideosEnabledTextNode = doc.createTextNode(embeddedVidsEnabled)
+        #Add this as a child to the Embedded Video node
+        embeddedVideosEnabledNode.appendChild(embeddedVideosEnabledTextNode)
         
 
         
@@ -98,8 +107,20 @@ class PropertiesAccessor(object):
                     continue
                 elif(e.parentNode.tagName == self.MEDIAPLAYERENABLED):
                     self.MediaPlayerEnabled = e.nodeValue
-                print e.nodeValue
+                    print e.nodeValue
+                    continue
+                elif(e.parentNode.tagName == self.EMBEDDEDVIDEOSENABLED):
+                    self.embeddedVideosEnabled = e.nodeValue
+                    print e.nodeValue
+                    continue
             self.__readXml(e)
+            
+    def getEmbeddedVideosEnabled(self):
+        '''
+        Returns if Embedded Player is enabled
+        '''    
+        return self.embeddedVideosEnabled
+           
     def getMediaPlayerEnabled(self):
         '''
         Returns if media player is enabled

@@ -52,10 +52,16 @@ class Ui_MainWindow(object):
         self.videoList = videoList;
         #Once we receive update, we add them on the widget - i.e show video lists
         self.addWidgetOnLayout()  
+    def UpdateEmbeddedVideoState(self, state):
+        '''
+        Updates embedded video state
+        '''   
+        self.EmbeddedVideoState = state
         
     def setupUi(self, MainWindow):
         self.UILauncher = MainWindow
-        
+        #set flags to indicate state for embeded videos
+        self.EmbeddedVideoState = self.UILauncher.properties.getEmbeddedVideosEnabled()
         #Instantiate settings dialog with parent as the main window
         self.settingsDialog = youtube.gui.util.SettingsDialog.Ui_Dialog(MainWindow)
         #About Author
@@ -622,16 +628,24 @@ class Ui_MainWindow(object):
         '''
         This is where we embed the requested video in the webkit view
         It also enables the plugins from the browser
+        Update:13/07/2011: Allowed option to play videos on external browser, this was needed
+        as webkit relies on Flash plugin to be installed on Mozilla !
         '''
-        #Show a busy cursor
-        
-        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor);
-        websettings = self.webView.settings()
-        websettings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
-        
-        
         link = label.getWebLink()
-        self.embedVideo(link)
+        if self.EmbeddedVideoState=='true':
+            
+            #Show a busy cursor            
+            QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor);
+            websettings = self.webView.settings()
+            websettings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
+            self.embedVideo(link)
+#        
+#        
+    
+#        self.embedVideo(link)
+        else:
+            self.UILauncher.log.info("Using Default Browser with Embedded Link:" + link)
+            self.UILauncher.openBrowser(link)
         
     def embedVideo(self, link):
         self.UILauncher.log.info("Embedded Link:" + link)
