@@ -204,6 +204,7 @@ class Ui_Dialog(QtGui.QDialog):
         self.parentApp.setVlcPath(str(self.lineEdit_2.text()))
         self.parentApp.updateVideoLibrary()
         self.parentApp.setEmbeddedVideosState(self.embeddedPlayerEnabled)
+        self.parentApp.setMediaPlayerState(self.mediaPlayerEnabled)
         self.accept()
     def readValuesFromXml(self):
         '''
