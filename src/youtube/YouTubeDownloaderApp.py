@@ -313,6 +313,12 @@ class StartMainWidget(QtGui.QMainWindow):
         '''
         self.ui.UpdateEmbeddedVideoState(value)
     
+    def setMediaPlayerState(self, value):
+        '''
+        This sets flag to indicate whether media player is used to play library videos
+        '''
+        self.ui.UpdateMediaPlayerState(value)
+        
     def updateVideoLibrary(self):
         '''
         This loads up all video files on the view
@@ -353,6 +359,11 @@ class StartMainWidget(QtGui.QMainWindow):
         #Get Parent - check if we are not at the root node
         if (self.sender().currentItem().text(0) == 'Video Library'):
             return
+        #Check if media player is enabled
+        if (self.ui.MediaPlayerState=='false'):
+            self.log.info('No Media Player is selected. Use Settings Menu to set a player')
+            return
+        
         self.tokenList = []
         self.recursivePath = ""
         #Now we need to recursively traverse till we reach the root
