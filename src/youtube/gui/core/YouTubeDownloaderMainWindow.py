@@ -57,11 +57,18 @@ class Ui_MainWindow(object):
         Updates embedded video state
         '''   
         self.EmbeddedVideoState = state
-        
+    def UpdateMediaPlayerState(self, state):
+        '''
+        Sets Media Player state
+        '''
+        self.MediaPlayerState = state
+            
     def setupUi(self, MainWindow):
         self.UILauncher = MainWindow
         #set flags to indicate state for embeded videos
         self.EmbeddedVideoState = self.UILauncher.properties.getEmbeddedVideosEnabled()
+        #set flags to indicate whether media player is enabled
+        self.MediaPlayerState = self.UILauncher.properties.getMediaPlayerEnabled()
         #Instantiate settings dialog with parent as the main window
         self.settingsDialog = youtube.gui.util.SettingsDialog.Ui_Dialog(MainWindow)
         #About Author
