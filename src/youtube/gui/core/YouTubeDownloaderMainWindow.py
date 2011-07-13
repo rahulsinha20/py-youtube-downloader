@@ -353,7 +353,7 @@ class Ui_MainWindow(object):
         # So we form the absolute path and then set that as an html
         imageAbsolutePath = os.getcwd() + "\Resources\DefaultWebKitImage.png"
         htmlTemp = "<br><img src = \"file:///" + imageAbsolutePath + "\"><br></br><b><font size =\"2\" color =\"RED\"> &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;Video Player</font></b>"
-        htmlTemp += "<br></br><b><font size =\"2\" color =\"GREEN\"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click on the selected video for online streaming</b>"
+        htmlTemp += "<br></br><b><font size =\"2\" color =\"GREEN\"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click on the selected video for Playback</b>"
         self.webView.setHtml(htmlTemp)
         #WIndow Icon
         MainWindow.setWindowIcon(QtGui.QIcon(QtCore.QString("./resources/app.ico")))
