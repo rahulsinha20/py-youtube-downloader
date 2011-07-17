@@ -242,9 +242,10 @@ class Ui_Dialog(QtGui.QDialog):
         if browseForDirectory is True:
             browseDialog = QtGui.QFileDialog(self, dialogText, self.lineEdit.text())    
             browseDialog.setFileMode(QtGui.QFileDialog.Directory)
+            browseDialog.setOption(QtGui.QFileDialog.ShowDirsOnly)
         else:
             browseDialog = QtGui.QFileDialog(self, dialogText, self.lineEdit_2.text())
-        browseDialog.setOption(QtGui.QFileDialog.ShowDirsOnly)       
+            
         browseDialog.setViewMode(QtGui.QFileDialog.Detail)
         path = ''
         if (browseDialog.exec_()):
