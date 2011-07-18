@@ -644,8 +644,8 @@ if __name__ == "__main__":
     try:
         if not os.path.exists('./Logs'):
             os.makedirs('./Logs')
-        sys.stdout = open('./Logs/Exceptions', 'a')
-        sys.stderr = open('./Logs/Exceptions', 'a') 
+        sys.stdout = open('./Logs/Output.txt', 'w')
+        sys.stderr = open('./Logs/Exceptions.txt', 'w') 
     except:
         pass      
     print "Running Video Download Assistant v2.1"
