@@ -640,6 +640,14 @@ class StartMainWidget(QtGui.QMainWindow):
         self.sec = sec - secElapsed - secElapsed2
 
 if __name__ == "__main__":
+    #This is necessary for Py2exe redirection of exceptions, otherwise a dialog is shown notifying of an error log
+    try:
+        if not os.path.exists('./Logs'):
+            os.makedirs('./Logs')
+        sys.stdout = open('./Logs/Exceptions', 'a')
+        sys.stderr = open('./Logs/Exceptions', 'a') 
+    except:
+        pass      
     print "Running Video Download Assistant v2.1"
     app = QtGui.QApplication(sys.argv)
     #create the splash screen
