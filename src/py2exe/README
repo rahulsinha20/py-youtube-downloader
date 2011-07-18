@@ -1,0 +1,3 @@
+To Build with py2xe, move setup.py and YouTubeDownloaderApp.py to: /youtube
+and run python setup.py py2exe
+Make sure <imageformats> is also manually copied to <dist>
