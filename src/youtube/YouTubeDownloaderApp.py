@@ -605,13 +605,15 @@ class StartMainWidget(QtGui.QMainWindow):
         This method dumps the logs into its appropriate log file
         '''
         self.log.info("Quitting")
-        #Over here log all information in a log file
-        if not os.path.exists('./Logs'):
-            os.makedirs('./Logs')
-        logFile = open('./Logs/LogFile.txt', 'a')
-        logFile.write(self.loggingHandler.getLoggingCompleteText())
-        logFile.close()
-        
+        try:
+            #Over here log all information in a log file
+            if not os.path.exists('./Logs'):
+                os.makedirs('./Logs')
+            logFile = open('./Logs/LogFile.txt', 'a')
+            logFile.write(self.loggingHandler.getLoggingCompleteText())
+            logFile.close()
+        except:
+            pass
     def exitActionSlot(self):
         '''
         Slot Handler for Exit 
