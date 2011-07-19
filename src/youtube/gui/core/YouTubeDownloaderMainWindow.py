@@ -65,7 +65,7 @@ class Ui_MainWindow(object):
             
     def setupUi(self, MainWindow):
         self.UILauncher = MainWindow
-        #set flags to indicate state for embeded videos
+        #set flags to indicate state for embedded videos
         self.EmbeddedVideoState = self.UILauncher.properties.getEmbeddedVideosEnabled()
         #set flags to indicate whether media player is enabled
         self.MediaPlayerState = self.UILauncher.properties.getMediaPlayerEnabled()
