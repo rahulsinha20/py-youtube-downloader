@@ -211,24 +211,29 @@ class Ui_Dialog(QtGui.QDialog):
         This reads values from config file
         '''
         properties = youtube.util.xml.PropertiesAccessor.PropertiesAccessor()
-        properties.readProperties()
-        
-        self.lineEdit.setText(properties.getLibraryPath())
-        self.lineEdit_2.setText(properties.getVlcPath())
-        #Check settings for media player
-        if properties.getMediaPlayerEnabled() == 'true':
+        if (properties.readProperties()==-1):
+            #Set defaults
             self.checkBox.setChecked(False)
             self.pushButton_2.setEnabled(True)
             self.lineEdit_2.setEnabled(True)
-        else:
-            self.checkBox.setChecked(True)
-            self.pushButton_2.setEnabled(False)
-            self.lineEdit_2.setEnabled(False)
-        #Check settings for embedded videos
-        if properties.getEmbeddedVideosEnabled()=='true':
             self.checkBox_2.setChecked(False)
         else:
-            self.checkBox_2.setChecked(True)
+            self.lineEdit.setText(properties.getLibraryPath())
+            self.lineEdit_2.setText(properties.getVlcPath())
+            #Check settings for media player
+            if properties.getMediaPlayerEnabled() == 'true':
+                self.checkBox.setChecked(False)
+                self.pushButton_2.setEnabled(True)
+                self.lineEdit_2.setEnabled(True)
+            else:
+                self.checkBox.setChecked(True)
+                self.pushButton_2.setEnabled(False)
+                self.lineEdit_2.setEnabled(False)
+            #Check settings for embedded videos
+            if properties.getEmbeddedVideosEnabled()=='true':
+                self.checkBox_2.setChecked(False)
+            else:
+                self.checkBox_2.setChecked(True)
         
     def browseForLibLocation(self):
         location = self.browseForFiles("Select Library Location", True)
