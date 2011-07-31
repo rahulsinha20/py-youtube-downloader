@@ -230,7 +230,7 @@ class FileDownloader(object):
         self._num_downloads = 0
         self._screen_file = [sys.stdout, sys.stderr][params.get('logtostderr', False)]
         self.params = params
-        self.parentThread = parentThread
+        self.parentSingularThread = parentThread
     
     @staticmethod
     def pmkdir(filename):
@@ -385,7 +385,7 @@ class FileDownloader(object):
             return
 #        self.to_screen(u'\r[download] %s of %s at %s ETA %s' %
 #                (percent_str, data_len_str, speed_str, eta_str), skip_eol=True)
-        self.parentThread.emit(QtCore.SIGNAL('progress_update(int)'), int(float(percent_str)))
+        self.parentSingularThread.parentControllerThread.emit(QtCore.SIGNAL('progress_update(int, int)'), int(float(percent_str)), int(self.parentSingularThread.counter))
 #        (self.parent.ui.progressBar).setValue(int(float(percent_str)))
         if (int(float(percent_str)) >= 99):
             print "Download Complete"
@@ -394,8 +394,8 @@ class FileDownloader(object):
             sys.stdout.flush()
             sys.stdin.flush()
             #Emit a signal to be captured by the controller
-            self.parentThread.emit(QtCore.SIGNAL('download_completed()'))
-            self.parentThread.emit(QtCore.SIGNAL('video_downloaded(int)'), self.parentThread.videoDownloadCounter)
+            self.parentSingularThread.parentControllerThread.emit(QtCore.SIGNAL('download_completed()'))
+            self.parentSingularThread.parentControllerThread.emit(QtCore.SIGNAL('video_downloaded(int)'), self.parentSingularThread.parentControllerThread.videoDownloadCounter)
     def report_resuming_byte(self, resume_len):
         """Report attempt to resume at given byte."""
         self.to_screen(u'[download] Resuming download at byte %s' % resume_len)
@@ -2263,13 +2263,19 @@ class NewDownloader(QThread):
 #        threading.Thread.__init__(self) # Call the Parent constructor
         self.parent = parent # Store the reference of the class that created me
         self.urlListWithTitles = videoList
+        self.tempUrlListing=[]
+        self.tempTitleListing=[]
+        self.downloadPath=''
         self.numberOfVideos = len(self.urlListWithTitles)
         #Check if Search keyword is enabled
         if parent.ui.lineEdit.isEnabled() == True:
             self.searchText = str(parent.ui.lineEdit.text())
         else:
             self.searchText = ''
-        self.createFolderForFiles()    
+        self.createFolderForFiles()
+        for k, v in self.urlListWithTitles.items():
+            self.tempUrlListing.append(v);
+            self.tempTitleListing.append(k)    
     def createFolderForFiles(self):
         
          # Create a directory to store downloaded videos
@@ -2284,18 +2290,311 @@ class NewDownloader(QThread):
          except OSError:
              pass
     def run(self):
+        
         #Extract all the urls stored as key and their titles
         tempUrlListing = []
         tempTitleListing = []
         titlesCounter = 0
         self.videoDownloadCounter = 0
-        for k, v in self.urlListWithTitles.items():
-            tempUrlListing.append(v);
-            tempTitleListing.append(k)
+        
         #Now loop for every URL
-        for urlListing2 in tempUrlListing:
-            print 'Now downloading url:', urlListing2
+        for urlListing2 in self.tempUrlListing:
+            #Create a new item toactive downloads
+            self.emit(QtCore.SIGNAL('add_item_to_active_downloads(QString)'),self.tempTitleListing[self.videoDownloadCounter]) 
+
+            # Create a new thread            
+
+            thread = SingularThread(self,urlListing2,self.tempTitleListing[self.videoDownloadCounter],self.videoDownloadCounter)
+            thread.start()
             self.videoDownloadCounter = self.videoDownloadCounter + 1
+#            print 'Now downloading url:', urlListing2
+#            self.videoDownloadCounter = self.videoDownloadCounter + 1
+#            try:
+#                # Modules needed only when running the main program
+#                import getpass
+#                import optparse
+#        
+#                # Function to update the program file with the latest version from bitbucket.org
+#                def update_self(downloader, filename):
+#                    # Note: downloader only used for options
+#                    if not os.access (filename, os.W_OK):
+#                        sys.exit('ERROR: no write permissions on %s' % filename)
+#        
+#                    downloader.to_screen('Updating to latest stable version...')
+#                    latest_url = 'http://github.com/rg3/youtube-dl/raw/master/LATEST_VERSION'
+#                    latest_version = urllib.urlopen(latest_url).read().strip()
+#                    prog_url = 'http://github.com/rg3/youtube-dl/raw/%s/youtube-dl' % latest_version
+#                    newcontent = urllib.urlopen(prog_url).read()
+#                    stream = open(filename, 'w')
+#                    stream.write(newcontent)
+#                    stream.close()
+#                    downloader.to_screen('Updated to version %s' % latest_version)
+#        
+#                # Parse command line
+#                parser = optparse.OptionParser(
+#                    usage='Usage: %prog [options] url...',
+#                    version='2010.12.09',
+#                    conflict_handler='resolve',
+#                )
+#        
+#                parser.add_option('-h', '--help',
+#                        action='help', help='print this help text and exit')
+#                parser.add_option('-v', '--version',
+#                        action='version', help='print program version and exit')
+#                parser.add_option('-U', '--update',
+#                        action='store_true', dest='update_self', help='update this program to latest stable version')
+#                parser.add_option('-i', '--ignore-errors',
+#                        action='store_true', dest='ignoreerrors', help='continue on download errors', default=False)
+#                parser.add_option('-r', '--rate-limit',
+#                        dest='ratelimit', metavar='LIMIT', help='download rate limit (e.g. 50k or 44.6m)')
+#                parser.add_option('-R', '--retries',
+#                        dest='retries', metavar='RETRIES', help='number of retries (default is 10)', default=10)
+#                parser.add_option('--playlist-start',
+#                        dest='playliststart', metavar='NUMBER', help='playlist video to start at (default is 1)', default=1)
+#                parser.add_option('--playlist-end',
+#                        dest='playlistend', metavar='NUMBER', help='playlist video to end at (default is last)', default=-1)
+#        
+#                authentication = optparse.OptionGroup(parser, 'Authentication Options')
+#                authentication.add_option('-u', '--username',
+#                        dest='username', metavar='USERNAME', help='account username')
+#                authentication.add_option('-p', '--password',
+#                        dest='password', metavar='PASSWORD', help='account password')
+#                authentication.add_option('-n', '--netrc',
+#                        action='store_true', dest='usenetrc', help='use .netrc authentication data', default=False)
+#                parser.add_option_group(authentication)
+#        
+#                video_format = optparse.OptionGroup(parser, 'Video Format Options')
+#                video_format.add_option('-f', '--format',
+#                        action='store', dest='format', metavar='FORMAT', help='video format code')
+#                video_format.add_option('-m', '--mobile-version',
+#                        action='store_const', dest='format', help='alias for -f 17', const='17')
+#                video_format.add_option('--all-formats',
+#                        action='store_const', dest='format', help='download all available video formats', const='-1')
+#                video_format.add_option('--max-quality',
+#                        action='store', dest='format_limit', metavar='FORMAT', help='highest quality format to download')
+#                video_format.add_option('-b', '--best-quality',
+#                        action='store_true', dest='bestquality', help='download the best video quality (DEPRECATED)')
+#                parser.add_option_group(video_format)
+#        
+#                verbosity = optparse.OptionGroup(parser, 'Verbosity / Simulation Options')
+#                verbosity.add_option('-q', '--quiet',
+#                        action='store_true', dest='quiet', help='activates quiet mode', default=False)
+#                verbosity.add_option('-s', '--simulate',
+#                        action='store_true', dest='simulate', help='do not download video', default=False)
+#                verbosity.add_option('-g', '--get-url',
+#                        action='store_true', dest='geturl', help='simulate, quiet but print URL', default=False)
+#                verbosity.add_option('-e', '--get-title',
+#                        action='store_true', dest='gettitle', help='simulate, quiet but print title', default=False)
+#                verbosity.add_option('--get-thumbnail',
+#                        action='store_true', dest='getthumbnail', help='simulate, quiet but print thumbnail URL', default=False)
+#                verbosity.add_option('--get-description',
+#                        action='store_true', dest='getdescription', help='simulate, quiet but print video description', default=False)
+#                verbosity.add_option('--no-progress',
+#                        action='store_true', dest='noprogress', help='do not print progress bar', default=False)
+#                parser.add_option_group(verbosity)
+#        
+#                filesystem = optparse.OptionGroup(parser, 'Filesystem Options')
+#                filesystem.add_option('-t', '--title',
+#                        action='store_true', dest='usetitle', help='use title in file name', default=False)
+#                filesystem.add_option('-l', '--literal',
+#                        action='store_true', dest='useliteral', help='use literal title in file name', default=False)
+#                filesystem.add_option('-A', '--auto-number',
+#                        action='store_true', dest='autonumber', help='number downloaded files starting from 00000', default=False)
+#                filesystem.add_option('-o', '--output',
+#                        dest='outtmpl', metavar='TEMPLATE', help='output filename template')
+#                filesystem.add_option('-a', '--batch-file',
+#                        dest='batchfile', metavar='FILE', help='file containing URLs to download (\'-\' for stdin)')
+#                filesystem.add_option('-w', '--no-overwrites',
+#                        action='store_true', dest='nooverwrites', help='do not overwrite files', default=False)
+#                filesystem.add_option('-c', '--continue',
+#                        action='store_true', dest='continue_dl', help='resume partially downloaded files', default=False)
+#                filesystem.add_option('--cookies',
+#                        dest='cookiefile', metavar='FILE', help='file to dump cookie jar to')
+#                parser.add_option_group(filesystem)
+#        
+#                (opts, args) = parser.parse_args()
+#        
+#                # Open appropriate CookieJar
+#                if opts.cookiefile is None:
+#                    jar = cookielib.CookieJar()
+#                else:
+#                    try:
+#                        jar = cookielib.MozillaCookieJar(opts.cookiefile)
+#                        if os.path.isfile(opts.cookiefile) and os.access(opts.cookiefile, os.R_OK):
+#                            jar.load()
+#                    except (IOError, OSError), err:
+#                        sys.exit(u'ERROR: unable to open cookie file')
+#        
+#                # General configuration
+#                cookie_processor = urllib2.HTTPCookieProcessor(jar)
+#                urllib2.install_opener(urllib2.build_opener(urllib2.ProxyHandler()))
+#                urllib2.install_opener(urllib2.build_opener(cookie_processor))
+#                socket.setdefaulttimeout(300) # 5 minutes should be enough (famous last words)
+#        
+#                # Batch file verification
+#                batchurls = []
+#                if opts.batchfile is not None:
+#                    try:
+#                        if opts.batchfile == '-':
+#                            batchfd = sys.stdin
+#                        else:
+#                            batchfd = open(opts.batchfile, 'r')
+#                        batchurls = batchfd.readlines()
+#                        batchurls = [x.strip() for x in batchurls]
+#                        batchurls = [x for x in batchurls if len(x) > 0 and not re.search(r'^[#/;]', x)]
+#                    except IOError:
+#                        sys.exit(u'ERROR: batch file could not be read')
+#                urlListing = []
+#                urlListing.append(urlListing2)
+#                all_urls = urlListing + args
+#        
+#                # Conflicting, missing and erroneous options
+#                if opts.bestquality:
+#                    print >>sys.stderr, u'\nWARNING: -b/--best-quality IS DEPRECATED AS IT IS THE DEFAULT BEHAVIOR NOW\n'
+#                if opts.usenetrc and (opts.username is not None or opts.password is not None):
+#                    parser.error(u'using .netrc conflicts with giving username/password')
+#                if opts.password is not None and opts.username is None:
+#                    parser.error(u'account username missing')
+#                if opts.outtmpl is not None and (opts.useliteral or opts.usetitle or opts.autonumber):
+#                    parser.error(u'using output template conflicts with using title, literal title or auto number')
+#                if opts.usetitle and opts.useliteral:
+#                    parser.error(u'using title conflicts with using literal title')
+#                if opts.username is not None and opts.password is None:
+#                    opts.password = getpass.getpass(u'Type account password and press return:')
+#                if opts.ratelimit is not None:
+#                    numeric_limit = FileDownloader.parse_bytes(opts.ratelimit)
+#                    if numeric_limit is None:
+#                        parser.error(u'invalid rate limit specified')
+#                    opts.ratelimit = numeric_limit
+#                if opts.retries is not None:
+#                    try:
+#                        opts.retries = long(opts.retries)
+#                    except (TypeError, ValueError), err:
+#                        parser.error(u'invalid retry count specified')
+#                try:
+#                    opts.playliststart = long(opts.playliststart)
+#                    if opts.playliststart <= 0:
+#                        raise ValueError
+#                except (TypeError, ValueError), err:
+#                    parser.error(u'invalid playlist start number specified')
+#                try:
+#                    opts.playlistend = long(opts.playlistend)
+#                    if opts.playlistend != -1 and (opts.playlistend <= 0 or opts.playlistend < opts.playliststart):
+#                        raise ValueError
+#                except (TypeError, ValueError), err:
+#                    parser.error(u'invalid playlist end number specified')
+#        
+#                # Information extractors
+#                youtube_ie = YoutubeIE(self.downloadPath, tempTitleListing[titlesCounter]) ###FIXME - make it work for more thann one titles
+#                metacafe_ie = MetacafeIE(youtube_ie)
+#                dailymotion_ie = DailymotionIE()
+#                youtube_pl_ie = YoutubePlaylistIE(youtube_ie)
+#                youtube_user_ie = YoutubeUserIE(youtube_ie)
+#                youtube_search_ie = YoutubeSearchIE(youtube_ie)
+#                google_ie = GoogleIE()
+#                google_search_ie = GoogleSearchIE(google_ie)
+#                photobucket_ie = PhotobucketIE()
+#                yahoo_ie = YahooIE()
+#                yahoo_search_ie = YahooSearchIE(yahoo_ie)
+#                deposit_files_ie = DepositFilesIE()
+#                generic_ie = GenericIE()
+#                #increment the counter
+#                titlesCounter = titlesCounter + 1
+#        
+#                # File downloader
+#                fd = FileDownloader({
+#                    'usenetrc': opts.usenetrc,
+#                    'username': opts.username,
+#                    'password': opts.password,
+#                    'quiet': (opts.quiet or opts.geturl or opts.gettitle or opts.getthumbnail or opts.getdescription),
+#                    'forceurl': opts.geturl,
+#                    'forcetitle': opts.gettitle,
+#                    'forcethumbnail': opts.getthumbnail,
+#                    'forcedescription': opts.getdescription,
+#                    'simulate': (opts.simulate or opts.geturl or opts.gettitle or opts.getthumbnail or opts.getdescription),
+#                    'format': opts.format,
+#                    'format_limit': opts.format_limit,
+#                    'outtmpl': ((opts.outtmpl is not None and opts.outtmpl.decode(preferredencoding()))
+#                        or (opts.format == '-1' and opts.usetitle and u'%(stitle)s-%(id)s-%(format)s.%(ext)s')
+#                        or (opts.format == '-1' and opts.useliteral and u'%(title)s-%(id)s-%(format)s.%(ext)s')
+#                        or (opts.format == '-1' and u'%(id)s-%(format)s.%(ext)s')
+#                        or (opts.usetitle and opts.autonumber and u'%(autonumber)s-%(stitle)s-%(id)s.%(ext)s')
+#                        or (opts.useliteral and opts.autonumber and u'%(autonumber)s-%(title)s-%(id)s.%(ext)s')
+#                        or (opts.usetitle and u'%(stitle)s-%(id)s.%(ext)s')
+#                        or (opts.useliteral and u'%(title)s-%(id)s.%(ext)s')
+#                        or (opts.autonumber and u'%(autonumber)s-%(id)s.%(ext)s')
+#                        or u'%(id)s.%(ext)s'),
+#                    'ignoreerrors': opts.ignoreerrors,
+#                    'ratelimit': opts.ratelimit,
+#                    'nooverwrites': opts.nooverwrites,
+#                    'retries': opts.retries,
+#                    'continuedl': opts.continue_dl,
+#                    'noprogress': opts.noprogress,
+#                    'playliststart': opts.playliststart,
+#                    'playlistend': opts.playlistend,
+#                    'logtostderr': opts.outtmpl == '-',
+#                    }, self)
+#                fd.add_info_extractor(youtube_search_ie)
+#                fd.add_info_extractor(youtube_pl_ie)
+#                fd.add_info_extractor(youtube_user_ie)
+#                fd.add_info_extractor(metacafe_ie)
+#                fd.add_info_extractor(dailymotion_ie)
+#                fd.add_info_extractor(youtube_ie)
+#                fd.add_info_extractor(google_ie)
+#                fd.add_info_extractor(google_search_ie)
+#                fd.add_info_extractor(photobucket_ie)
+#                fd.add_info_extractor(yahoo_ie)
+#                fd.add_info_extractor(yahoo_search_ie)
+#                fd.add_info_extractor(deposit_files_ie)
+#        
+#                # This must come last since it's the
+#                # fallback if none of the others work
+#                fd.add_info_extractor(generic_ie)
+#        
+#                # Update version
+#                if opts.update_self:
+#                    update_self(fd, sys.argv[0])
+#        
+#                # Maybe do nothing
+#                #if len(all_urls) < 1:
+#                 #   if not opts.update_self:
+#                  #      parser.error(u'you must provide at least one URL')
+#                   # else:
+#                    #    sys.exit()
+#                retcode = fd.download(all_urls)
+#        
+#                # Dump cookie jar if requested
+#                if opts.cookiefile is not None:
+#                    try:
+#                        jar.save()
+#                    except (IOError, OSError), err:
+#                        sys.exit(u'ERROR: unable to save cookie jar')
+#        
+##                sys.exit(retcode)
+#        
+#            except DownloadError:
+#                sys.exit(1)
+#            except SameFileError:
+#                sys.exit(u'ERROR: fixed output name but more than one file to download')
+#            except KeyboardInterrupt:
+#                sys.exit(u'\nERROR: Interrupted by user')
+from PyQt4.QtCore import QThread                
+class SingularThread(QtCore.QThread):
+    '''
+    classdocs
+    '''
+
+
+    def __init__(self, parent, url, title,counter):
+
+        QThread.__init__(self, parent)
+        self.parentControllerThread = parent
+        self.urlListing2 = url
+        self.counter = counter
+        self.title = title
+    def run(self):
+            print 'Now downloading url:', self.urlListing2
+#            self.videoDownloadCounter = self.videoDownloadCounter + 1
             try:
                 # Modules needed only when running the main program
                 import getpass
@@ -2432,7 +2731,7 @@ class NewDownloader(QThread):
                     except IOError:
                         sys.exit(u'ERROR: batch file could not be read')
                 urlListing = []
-                urlListing.append(urlListing2)
+                urlListing.append(self.urlListing2)
                 all_urls = urlListing + args
         
                 # Conflicting, missing and erroneous options
@@ -2472,7 +2771,8 @@ class NewDownloader(QThread):
                     parser.error(u'invalid playlist end number specified')
         
                 # Information extractors
-                youtube_ie = YoutubeIE(self.downloadPath, tempTitleListing[titlesCounter]) ###FIXME - make it work for more thann one titles
+#                youtube_ie = YoutubeIE(self.downloadPath, tempTitleListing[titlesCounter]) ###FIXME - make it work for more thann one titles
+                youtube_ie = YoutubeIE(self.parentControllerThread.downloadPath, self.title) ###FIXME - make it work for more thann one titles
                 metacafe_ie = MetacafeIE(youtube_ie)
                 dailymotion_ie = DailymotionIE()
                 youtube_pl_ie = YoutubePlaylistIE(youtube_ie)
@@ -2486,7 +2786,7 @@ class NewDownloader(QThread):
                 deposit_files_ie = DepositFilesIE()
                 generic_ie = GenericIE()
                 #increment the counter
-                titlesCounter = titlesCounter + 1
+#                titlesCounter = titlesCounter + 1
         
                 # File downloader
                 fd = FileDownloader({
@@ -2565,3 +2865,4 @@ class NewDownloader(QThread):
                 sys.exit(u'ERROR: fixed output name but more than one file to download')
             except KeyboardInterrupt:
                 sys.exit(u'\nERROR: Interrupted by user')
+                        

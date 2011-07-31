@@ -593,7 +593,9 @@ class StartMainWidget(QtGui.QMainWindow):
             #Updates from downloader thread
             QtCore.QObject.connect(self.obj, QtCore.SIGNAL('download_completed()'), self.updateVideoLibrary)
             #Progress update
-            QtCore.QObject.connect(self.obj, QtCore.SIGNAL('progress_update(int)'), self.downloadProgressUpdate)
+            QtCore.QObject.connect(self.obj, QtCore.SIGNAL('progress_update(int, int)'), self.downloadProgressUpdate)
+            #Add new items to active download window
+            QtCore.QObject.connect(self.obj, QtCore.SIGNAL('add_item_to_active_downloads(QString)'), self.addItemToActiveDownload)
             #Videos completed signal
             QtCore.QObject.connect(self.obj, QtCore.SIGNAL('video_downloaded(int)'), self.downloadVideosCompletedUpdate)
             self.obj.start()
@@ -601,6 +603,8 @@ class StartMainWidget(QtGui.QMainWindow):
             self.ui.pushButton_4.setEnabled(False)
         else:
             self.log.info("Downloader found nothing to download")
+    def addItemToActiveDownload(self, text):
+        self.ui.createActiveDownloadItem(text)
     def downloadVideosCompletedUpdate(self, value):
         '''
         Updates label with number of videos completed after a download
@@ -617,10 +621,13 @@ class StartMainWidget(QtGui.QMainWindow):
             #Also clear the videolist
             self.videoList.clear()
             self.ui.lineEdit_3.setText('')
-    def downloadProgressUpdate(self, value):
+    
+    def downloadProgressUpdate(self, value, index):
         '''
         Update download progress bar
         '''
+        obj = self.ui.ActiveDownloadItemTable[index]
+        obj.getActiveDownloadProgressBar().setValue(value)
         self.ui.progressBar.setValue(value)
    
     def flushBeforeExit(self):

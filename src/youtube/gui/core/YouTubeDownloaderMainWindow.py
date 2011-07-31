@@ -9,6 +9,7 @@
 
 from PyQt4 import QtCore, QtGui, QtNetwork, Qt
 from AboutAuthor import Ui_Dialog
+from youtube.gui.util.ActiveDownloadItem import ActiveDownloadItem
 import urllib
 import youtube.gui.util.SettingsDialog
 import os
@@ -65,6 +66,8 @@ class Ui_MainWindow(object):
             
     def setupUi(self, MainWindow):
         self.UILauncher = MainWindow
+        self.ActiveDownloadItemTable = {}
+        self.activeDownloadRowCounter = 0
         #set flags to indicate state for embedded videos
         self.EmbeddedVideoState = self.UILauncher.properties.getEmbeddedVideosEnabled()
         #set flags to indicate whether media player is enabled
@@ -439,7 +442,28 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    
+    def createActiveDownloadItem(self, text):
+        self.textEdit_tab33.insertRow(self.textEdit_tab33.rowCount())
+        lbl= QtGui.QLabel(text)
+        self.textEdit_tab33.setCellWidget(self.activeDownloadRowCounter, 0, lbl)
+        progressMainStyle2 = """
+            QProgressBar {
+                text-align: center;                
+            }"""
+        progressBar2 = QtGui.QProgressBar()
+        progressBar2.setMaximum(100)
+        progressBar2.setValue(1)
+        progressBar2.setStyleSheet(progressMainStyle2)
+        self.textEdit_tab33.setCellWidget(self.activeDownloadRowCounter, 1, progressBar2)
+        btn = QtGui.QPushButton()
+        btn.setFlat(True)
+        btn.setAutoFillBackground(True)
+        btn.setIcon(QtGui.QIcon(QtCore.QString("./resources/cancelDownload.png")))
+        
+        self.textEdit_tab33.setCellWidget(self.activeDownloadRowCounter, 2, btn)
+        obj = ActiveDownloadItem(lbl, progressBar2, btn)
+        self.ActiveDownloadItemTable[self.activeDownloadRowCounter]=obj
+        self.activeDownloadRowCounter=self.activeDownloadRowCounter+1
     def addDefaultPic(self):
         self.gridLayout.addWidget(self.label_defaultPic, 0, 0)
         self.defaultSplashScreen = True
