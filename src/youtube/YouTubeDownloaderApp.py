@@ -67,7 +67,7 @@ class StartMainWidget(QtGui.QMainWindow):
         #Combo Box slot for Standard feeds
         QtCore.QObject.connect(self.ui.comboBox, QtCore.SIGNAL("activated(int)"), self.comboBoxSlot)
 #        #Slot for indicating that web kit has loaded the page/media
-        QtCore.QObject.connect(self.ui.webView, QtCore.SIGNAL("loadFinished(bool)"), self.mediaLoaded);
+        QtCore.QObject.connect(self.ui.webView, QtCore.SIGNAL("loadFinished(bool)"), self.mediaLoaded)
         #install an event filter on the tree widget to detect DEL key
         self.ui.treeWidget.installEventFilter(self)
         self.statusBar().showMessage("Application Started", 2000)
@@ -164,7 +164,7 @@ class StartMainWidget(QtGui.QMainWindow):
         '''
         self.log.info("Media Loaded")
         if state == True:
-            QtGui.QApplication.setOverrideCursor(QtCore.Qt.ArrowCursor);
+            QtGui.QApplication.setOverrideCursor(QtCore.Qt.ArrowCursor)
             
     def comboBoxSlot(self, index):
         '''
@@ -334,7 +334,7 @@ class StartMainWidget(QtGui.QMainWindow):
         try:
             self.getFilesInDirectory(self.libraryPath, rootItem)
         except:
-             self.showSettingsDialogSlot()
+            self.showSettingsDialogSlot()
         self.ui.treeWidget.addTopLevelItem(rootItem)
         #Expand all nodes from the root
         self.ui.treeWidget.expandAll()
@@ -353,7 +353,7 @@ class StartMainWidget(QtGui.QMainWindow):
         
     def playVideo(self):
         '''
-        This is the slot that plays the video by invoking an external vlc
+        This is the slot that plays the video by invoking an external media player
         instance. It also checks if the video entry is already not queued.
         '''
         #Get Parent - check if we are not at the root node
@@ -446,49 +446,49 @@ class StartMainWidget(QtGui.QMainWindow):
                     
     def directDownloadSlot(self):
 #            print 'Button clicked:',self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter -1 ] # -1 as it stores the last pushed button
-            print 'button', self.sender()
-            #Check if state was Add
-            if (self.sender().getAddState() == True):
-                print 'Add State'
-                if self.ui.lineEdit_3.text() == '':
-                    self.totalVideosQueuedForDownload = 1
-                    self.ui.lineEdit_3.setText('1')
-                else:
-                    self.totalVideosQueuedForDownload = self.totalVideosQueuedForDownload + 1
-                    self.ui.lineEdit_3.setText(str(self.totalVideosQueuedForDownload))
-                self.sender().setAddState(False)
-                #Change its icon
-                self.sender().setIcon(QtGui.QIcon(QtCore.QString("./resources/delete.gif")))
-            else:            
-                print 'Removal State:row', self.sender().getButtonCounter()
-                if self.ui.lineEdit_3.text() != '':
-                    self.totalVideosQueuedForDownload = self.totalVideosQueuedForDownload - 1
-                    self.ui.lineEdit_3.setText(str(self.totalVideosQueuedForDownload))
+        print 'button', self.sender()
+        #Check if state was Add
+        if (self.sender().getAddState() == True):
+            print 'Add State'
+            if self.ui.lineEdit_3.text() == '':
+                self.totalVideosQueuedForDownload = 1
+                self.ui.lineEdit_3.setText('1')
+            else:
+                self.totalVideosQueuedForDownload = self.totalVideosQueuedForDownload + 1
+                self.ui.lineEdit_3.setText(str(self.totalVideosQueuedForDownload))
+            self.sender().setAddState(False)
+            #Change its icon
+            self.sender().setIcon(QtGui.QIcon(QtCore.QString("./resources/delete.gif")))
+        else:            
+            print 'Removal State:row', self.sender().getButtonCounter()
+            if self.ui.lineEdit_3.text() != '':
+                self.totalVideosQueuedForDownload = self.totalVideosQueuedForDownload - 1
+                self.ui.lineEdit_3.setText(str(self.totalVideosQueuedForDownload))
                 
-                #Remove state - delete this row
-                tempRow = self.sender().getButtonCounter()
-                self.ui.textEdit_2.removeRow(tempRow)
-                self.ui.listOfDirectLinkButtons.remove(self.sender())
-                #Shift all other elements below this
-                for element in range(0, len(self.ui.listOfDirectLinkButtons)):
-                    if self.ui.listOfDirectLinkButtons[element].getButtonCounter() > tempRow:
-                        self.ui.listOfDirectLinkButtons[element].setButtonCounter(self.ui.listOfDirectLinkButtons[element].getButtonCounter() - 1)
+            #Remove state - delete this row
+            tempRow = self.sender().getButtonCounter()
+            self.ui.textEdit_2.removeRow(tempRow)
+            self.ui.listOfDirectLinkButtons.remove(self.sender())
+            #Shift all other elements below this
+            for element in range(0, len(self.ui.listOfDirectLinkButtons)):
+                if self.ui.listOfDirectLinkButtons[element].getButtonCounter() > tempRow:
+                    self.ui.listOfDirectLinkButtons[element].setButtonCounter(self.ui.listOfDirectLinkButtons[element].getButtonCounter() - 1)
                 
-                self.ui.directDownloadLinkButtonCounter = self.ui.directDownloadLinkButtonCounter - 1
-                return
+            self.ui.directDownloadLinkButtonCounter = self.ui.directDownloadLinkButtonCounter - 1
+            return
             
-            #Add another button in a new row
-            self.ui.textEdit_2.insertRow(self.ui.textEdit_2.rowCount())
-            self.ui.listOfDirectLinkButtons.append(CustomizedDirectDownloadButton(self.ui.directDownloadLinkButtonCounter)) 
+        #Add another button in a new row
+        self.ui.textEdit_2.insertRow(self.ui.textEdit_2.rowCount())
+        self.ui.listOfDirectLinkButtons.append(CustomizedDirectDownloadButton(self.ui.directDownloadLinkButtonCounter)) 
             
-            self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter].setFlat(True)
-            self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter].setAutoFillBackground(True)
-            self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter].setIcon(QtGui.QIcon(QtCore.QString("./resources/add.gif")))
-            self.ui.textEdit_2.setCellWidget(self.ui.directDownloadLinkButtonCounter, 2, self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter])
+        self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter].setFlat(True)
+        self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter].setAutoFillBackground(True)
+        self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter].setIcon(QtGui.QIcon(QtCore.QString("./resources/add.gif")))
+        self.ui.textEdit_2.setCellWidget(self.ui.directDownloadLinkButtonCounter, 2, self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter])
                    
-            QtCore.QObject.connect(self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter], QtCore.SIGNAL("clicked()"), self.directDownloadSlot)
+        QtCore.QObject.connect(self.ui.listOfDirectLinkButtons[self.ui.directDownloadLinkButtonCounter], QtCore.SIGNAL("clicked()"), self.directDownloadSlot)
     #        self.listOfDirectLinkButtons.append(self.listOfDirectLinkButtons[self.directDownloadLinkButtonCounter])
-            self.ui.directDownloadLinkButtonCounter = self.ui.directDownloadLinkButtonCounter + 1 
+        self.ui.directDownloadLinkButtonCounter = self.ui.directDownloadLinkButtonCounter + 1 
             
                             
 
@@ -644,8 +644,8 @@ if __name__ == "__main__":
     try:
         if not os.path.exists('./Logs'):
             os.makedirs('./Logs')
-        sys.stdout = open('./Logs/Output.txt', 'w')
-        sys.stderr = open('./Logs/Exceptions.txt', 'w') 
+#        sys.stdout = open('./Logs/Output.txt', 'w')
+#        sys.stderr = open('./Logs/Exceptions.txt', 'w') 
     except:
         pass      
     print "Running Video Download Assistant v2.1"
