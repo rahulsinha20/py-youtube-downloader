@@ -604,10 +604,8 @@ class Ui_MainWindow(object):
             self.checkBoxesArray[self.j].setEnabled(False)
         #Connect a slot to label of images
         QtCore.QObject.connect(self.labelArray[self.j], QtCore.SIGNAL('clicked(PyQt_PyObject)'), self.labelPressed)
-#        QtCore.QObject.connect(self.labelArray[self.j], QtCore.SIGNAL('clicked(ClickableLabel)'), self.labelPressed)
-        #Give this widget a fixed size
-#        self.labelArray[self.j].setFixedSize(200,100)
-       
+#        #Added to cater for QMenu signal emit when the user selects download
+#        QtCore.QObject.connect(self.labelArray[self.j], QtCore.SIGNAL("clicked(PyQt_PyObject2)"), self.UILauncher.checkBoxSlot)
         #Assign a tool tip that contains some descriptive information  
         self.UILauncher.convertTimeInSec(int(self.videoList[self.j].getDuration()))
         hr = self.UILauncher.getHours()
@@ -619,10 +617,6 @@ class Ui_MainWindow(object):
             durationInfo += ":"
         durationInfo += str(min) + ":"
         durationInfo += str(sec) + "]"
-        
-        
-        
-        
         #Get source for the videos
 #        faviconAbsolutePath = os.getcwd() + "\Resources\YouTube_favicon.png"
 #        htmlTemp = "<img src=':/Resources/YouTube_favicon.png'>"
