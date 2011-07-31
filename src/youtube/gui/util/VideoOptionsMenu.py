@@ -29,16 +29,26 @@ class VideoOptionsMenu(QtGui.QMenu):
             self.clear()
             #Add New actions
             self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
-            self.cancelDownloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/cancelDownload.png")),self.tr('&Cancel Download'))
+            #Check if the video represented by the checkbox is available for a download
+            if self.parentWidget.controller.getCanDownloadCheckBoxState(self.parentWidget.getIndex()-1)== False:
+                self.notAvailableForDownload = self.addAction(QtGui.QIcon(QtCore.QString("./resources/exclaimation.png")),self.tr('&Download Unavailable'))
+            else:
+                self.cancelDownloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/cancelDownload.png")),self.tr('&Cancel Download'))
+                QtCore.QObject.connect(self.cancelDownloadAction, QtCore.SIGNAL("triggered()"), self.cancelDownloadItemClickedSlot)
             QtCore.QObject.connect(self.viewAction, QtCore.SIGNAL("triggered()"), self.viewMenuItemClickedSlot)
-            QtCore.QObject.connect(self.cancelDownloadAction, QtCore.SIGNAL("triggered()"), self.cancelDownloadItemClickedSlot)
+            
         else:
             self.clear()
             #Add actions
             self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
-            self.downloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/download.png")),self.tr('&Download'))
+            #Check if the video represented by the checkbox is available for a download
+            if self.parentWidget.controller.getCanDownloadCheckBoxState(self.parentWidget.getIndex()-1)== False:
+                self.notAvailableForDownload = self.addAction(QtGui.QIcon(QtCore.QString("./resources/exclaimation.png")),self.tr('&Download Unavailable'))
+            else:
+                self.downloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/download.png")),self.tr('&Download'))
+                QtCore.QObject.connect(self.downloadAction, QtCore.SIGNAL("triggered()"), self.downloadMenuItemClickedSlot)
             QtCore.QObject.connect(self.viewAction, QtCore.SIGNAL("triggered()"), self.viewMenuItemClickedSlot)
-            QtCore.QObject.connect(self.downloadAction, QtCore.SIGNAL("triggered()"), self.downloadMenuItemClickedSlot)
+            
                 
     def cancelDownloadItemClickedSlot(self):
         '''

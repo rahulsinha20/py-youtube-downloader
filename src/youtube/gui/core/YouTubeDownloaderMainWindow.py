@@ -602,6 +602,7 @@ class Ui_MainWindow(object):
 #        if (self.videoList[self.j].getEmbedLink()).startswith('http://www.youtube.com')==False:
         if not (((self.videoList[self.j].getWebPageUrl()).startswith('http://www.metacafe.com') == True)or ((self.videoList[self.j].getWebPageUrl()).startswith('http://www.youtube.com') == True) or ((self.videoList[self.j].getWebPageUrl()).startswith('http://www.dailymotion.com') == True)): #or ((self.videoList[self.j].getWebPageUrl()).startswith('http://photobucket.com') == True)): 
 #        if (self.videoList[self.j].getWebPageUrl()).startswith('http://www.youtube.com')==False:
+            self.checkBoxesArray[self.j].setNotDownloadable()
             self.checkBoxesArray[self.j].setEnabled(False)
         #Connect a slot to label of images
         QtCore.QObject.connect(self.labelArray[self.j], QtCore.SIGNAL('clicked(PyQt_PyObject)'), self.labelPressed)

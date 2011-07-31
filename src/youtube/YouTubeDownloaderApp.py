@@ -498,7 +498,11 @@ class StartMainWidget(QtGui.QMainWindow):
             self.ui.checkBoxesArray[index].setChecked(True)
         else:
             self.ui.checkBoxesArray[index].setChecked(False)
-
+    def getCanDownloadCheckBoxState(self, index):
+        '''
+        Returns if the video identified by this checkbox can be downloaded
+        '''
+        return self.ui.checkBoxesArray[index].getCanDownloadState()
     def getCheckBoxState(self, index):
         '''
         Returns status for the checkbox identified by index
