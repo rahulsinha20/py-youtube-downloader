@@ -1,3 +1,5 @@
+31-07-2011:
+(1) Added QMenu when right clicked on the interface. 
 28-02-2010
 (1) Implementation of a Video class to store video details
 (2) Videos are now assigned a number which is useful with QNetworkAccessManager
