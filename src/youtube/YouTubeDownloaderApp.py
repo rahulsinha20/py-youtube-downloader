@@ -490,12 +490,31 @@ class StartMainWidget(QtGui.QMainWindow):
     #        self.listOfDirectLinkButtons.append(self.listOfDirectLinkButtons[self.directDownloadLinkButtonCounter])
         self.ui.directDownloadLinkButtonCounter = self.ui.directDownloadLinkButtonCounter + 1 
             
-                            
+    def setCheckBoxState(self, index,state):
+        '''
+        Sets check box state
+        '''
+        if state == True:
+            self.ui.checkBoxesArray[index].setChecked(True)
+        else:
+            self.ui.checkBoxesArray[index].setChecked(False)
 
+    def getCheckBoxState(self, index):
+        '''
+        Returns status for the checkbox identified by index
+        True - if selected
+        False - otherwise
+        '''
+        if self.ui.checkBoxesArray[index].checkState()==QtCore.Qt.Checked:
+            return True
+        else: 
+            return False 
+        
     def checkBoxSlot(self, i):
         '''Slot that handles check box press event'''
         # IMP - This gives us the reference of the sender - which checkBox was pressed and text identifies the checkBox index from the array
-        videoInformationIndex = int((self.sender()).getNumberIndex())        
+        videoInformationIndex = int((self.sender()).getNumberIndex())  
+        print "VII", videoInformationIndex      
         #Check if the user checked it - can also be unchecked 
         if self.sender().checkState() == QtCore.Qt.Checked:
             self.totalVideosQueuedForDownload = self.totalVideosQueuedForDownload + 1

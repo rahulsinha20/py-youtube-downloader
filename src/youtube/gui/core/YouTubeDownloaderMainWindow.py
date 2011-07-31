@@ -493,8 +493,9 @@ class Ui_MainWindow(object):
         # Add Video information to the layout(Label,CheckBox)
         for i in range(0, self.elements):
 #            self.labelArray.append(QtGui.QLabel())
-            #Instantiate a label
-            clickableLabel = ClickableLabel()            
+            #Instantiate a label and pass the controller reference
+            clickableLabel = ClickableLabel(self.UILauncher) 
+            clickableLabel.setIndex(str(i+1))           
             self.labelArray.append(clickableLabel)
 #            box=QtGui.QCheckBox()
             box = NumberedCheckBox()
@@ -604,8 +605,6 @@ class Ui_MainWindow(object):
             self.checkBoxesArray[self.j].setEnabled(False)
         #Connect a slot to label of images
         QtCore.QObject.connect(self.labelArray[self.j], QtCore.SIGNAL('clicked(PyQt_PyObject)'), self.labelPressed)
-#        #Added to cater for QMenu signal emit when the user selects download
-#        QtCore.QObject.connect(self.labelArray[self.j], QtCore.SIGNAL("clicked(PyQt_PyObject2)"), self.UILauncher.checkBoxSlot)
         #Assign a tool tip that contains some descriptive information  
         self.UILauncher.convertTimeInSec(int(self.videoList[self.j].getDuration()))
         hr = self.UILauncher.getHours()

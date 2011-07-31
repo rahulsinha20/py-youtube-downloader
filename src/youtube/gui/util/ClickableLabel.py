@@ -17,7 +17,19 @@ class ClickableLabel(QtGui.QLabel):
         ''' Is the non default constructor that sets up the main widget'''
         QtGui.QLabel.__init__(self, parent)
         self.ref = self
-        
+        #Assign a reference to controller
+        self.controller = parent
+        self.index = 0;
+    def getIndex(self):
+        '''
+        Returns video index
+        '''
+        return int(self.index)
+    def setIndex(self, value):
+        '''
+        Every video item can be accessed via its unique index
+        '''
+        self.index = value
     def setWebLink(self, link):
         self.webUrl = link
     def mouseMoveEvent(self, mouseEvent):

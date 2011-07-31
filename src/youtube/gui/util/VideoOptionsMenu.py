@@ -17,22 +17,49 @@ class VideoOptionsMenu(QtGui.QMenu):
         QtGui.QMenu.__init__(self, parent)
         #Store a reference to clickable label that invoked me
         self.parentWidget = parent
-        #Add actions
-        self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
-#        self.downloadAction = self.addAction(self.tr('&Download'))
-        QtCore.QObject.connect(self.viewAction, QtCore.SIGNAL("triggered()"), self.viewMenuItemClickedSlot)
-#        QtCore.QObject.connect(self.downloadAction, QtCore.SIGNAL("triggered()"), self.downloadMenuItemClickedSlot)
-
+        #Check if this item is queued for download
+        self.isQueuedForDownload()
+        
+    def isQueuedForDownload(self):
+        '''
+        Disables Download menu item if this item has already been queued
+        '''
+        if self.parentWidget.controller.getCheckBoxState(self.parentWidget.getIndex()-1) == True:
+            #Already Queued, disable menu items
+            self.clear()
+            #Add New actions
+            self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
+            self.cancelDownloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/cancelDownload.png")),self.tr('&Cancel Download'))
+            QtCore.QObject.connect(self.viewAction, QtCore.SIGNAL("triggered()"), self.viewMenuItemClickedSlot)
+            QtCore.QObject.connect(self.cancelDownloadAction, QtCore.SIGNAL("triggered()"), self.cancelDownloadItemClickedSlot)
+        else:
+            self.clear()
+            #Add actions
+            self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
+            self.downloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/download.png")),self.tr('&Download'))
+            QtCore.QObject.connect(self.viewAction, QtCore.SIGNAL("triggered()"), self.viewMenuItemClickedSlot)
+            QtCore.QObject.connect(self.downloadAction, QtCore.SIGNAL("triggered()"), self.downloadMenuItemClickedSlot)
+                
+    def cancelDownloadItemClickedSlot(self):
+        '''
+        Removes this item from queued list of downloads
+        '''       
+        self.parentWidget.controller.setCheckBoxState(self.parentWidget.getIndex()-1, False)
+    
     def viewMenuItemClickedSlot(self):
         '''
         Slot when view menu item is selected
         '''       
         self.parentWidget.emit(QtCore.SIGNAL('clicked(PyQt_PyObject)'), self.parentWidget)
     
-#    def downloadMenuItemClickedSlot(self):
-#        '''
-#        Slot when download menu item is selected
-#        '''
-#        
-#        self.parentWidget.emit(QtCore.SIGNAL('clicked(PyQt_PyObject2)'), self.parentWidget)
-#        
+    def downloadMenuItemClickedSlot(self):
+        '''
+        Slot when download menu item is selected
+        The checkbox corresponding to this label starts from index 0, therefore we subtract 1 from getIndex()
+        CheckBoxes and Labels follow indices: {1,2...} but to retrieve from their
+        corresponding list we map 1 --> index 0
+        '''
+        #Select the checkbox, this will also emit a signal which is handled in the controller
+        self.parentWidget.controller.setCheckBoxState(self.parentWidget.getIndex()-1, True)
+#        checkBoxInstance.setChecked(True)
+#        checkBoxInstance.repaint()
