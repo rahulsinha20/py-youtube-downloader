@@ -245,6 +245,7 @@ class Ui_MainWindow(object):
         self.headerList.append('Add')
         self.textEdit_2.setHorizontalHeaderLabels(self.headerList)
         self.textEdit_2.verticalHeader().hide()
+       
         #Create a list of QPUshButtons
         self.listOfDirectLinkButtons = []
         self.directDownloadLinkButtonCounter = 0
@@ -261,6 +262,55 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_7.addWidget(self.scrollArea_3)
         self.tabWidget.addTab(self.tab_2, QtGui.QIcon(QtCore.QString("./resources/directVideoLink.gif")), "")
+        #Added tab for active downloads
+        self.tab_33 = QtGui.QWidget()
+        self.tab_33.setObjectName("tab_33")
+        self.horizontalLayout_tab337 = QtGui.QHBoxLayout(self.tab_33)
+        self.horizontalLayout_tab337.setObjectName("horizontalLayout_tab337")
+        self.scrollArea_tab33 = QtGui.QScrollArea(self.tab_33)
+        self.scrollArea_tab33.setWidgetResizable(True)
+        self.scrollArea_tab33.setObjectName("scrollArea_tab33")
+        self.scrollAreaWidgetContents_tab33 = QtGui.QWidget(self.scrollArea_tab33)
+        self.scrollAreaWidgetContents_tab33.setGeometry(QtCore.QRect(0, 0, 98, 77))
+        self.scrollAreaWidgetContents_tab33.setObjectName("scrollAreaWidgetContents_tab33")
+        self.horizontalLayout_tab33 = QtGui.QHBoxLayout(self.scrollAreaWidgetContents_tab33)
+        self.horizontalLayout_tab33.setObjectName("horizontalLayout_tab33")
+        #QTableWidget
+        self.textEdit_tab33 = QtGui.QTableWidget(self.scrollAreaWidgetContents_tab33)
+        self.textEdit_tab33.setObjectName("textEdit_33")
+        self.textEdit_tab33.setColumnCount(3)
+        self.textEdit_tab33.setRowCount(1)
+        #Set column width
+        self.textEdit_tab33.setColumnWidth(0, 90)
+        self.textEdit_tab33.setColumnWidth(1, 225)
+        self.textEdit_tab33.setColumnWidth(2, 40)
+        self.headerList_tab33 = QtCore.QStringList()
+        self.headerList_tab33.append('Title')
+        self.headerList_tab33.append('Progress')
+        self.headerList_tab33.append('Stop')
+        self.textEdit_tab33.setHorizontalHeaderLabels(self.headerList_tab33)
+        self.textEdit_tab33.verticalHeader().hide()
+#        
+#TEST
+        testButton = QtGui.QPushButton()
+        testButton.setFlat(True)
+        testButton.setAutoFillBackground(True)
+        testButton.setIcon(QtGui.QIcon(QtCore.QString("./resources/cancelDownload.png")))
+        self.textEdit_tab33.setCellWidget(0, 2, testButton)
+        progressMainStyle2 = """
+            QProgressBar {
+                text-align: center;                
+            }"""
+        progressBar2 = QtGui.QProgressBar()
+        progressBar2.setMaximum(100)
+        progressBar2.setValue(75)
+        progressBar2.setStyleSheet(progressMainStyle2)
+        self.textEdit_tab33.setCellWidget(0, 1, progressBar2)
+        self.horizontalLayout_tab33.addWidget(self.textEdit_tab33)
+        self.scrollArea_tab33.setWidget(self.scrollAreaWidgetContents_tab33)
+        self.horizontalLayout_tab337.addWidget(self.scrollArea_tab33)
+        self.tabWidget.addTab(self.tab_33, QtGui.QIcon(QtCore.QString("./resources/progress.gif")), "")
+#        #End addition of tab 3
         self.pushButton_4 = QtGui.QPushButton(self.groupBox_6)
         self.pushButton_4.setGeometry(QtCore.QRect(270, 270, 75, 23))
         self.pushButton_4.setObjectName("pushButton_4")
@@ -428,6 +478,7 @@ class Ui_MainWindow(object):
         self.groupBox_6.setTitle(QtGui.QApplication.translate("MainWindow", "Downloader", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Console", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("MainWindow", "Direct Video Links", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_33), QtGui.QApplication.translate("MainWindow", "Download Progress", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_4.setText(QtGui.QApplication.translate("MainWindow", "Download", None, QtGui.QApplication.UnicodeUTF8))
         self.label_12.setText(QtGui.QApplication.translate("MainWindow", "Queued Videos:", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
