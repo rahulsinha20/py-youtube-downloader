@@ -16,6 +16,7 @@ import os
 from youtube.gui.util.CustomizedDirectDownloadButton import CustomizedDirectDownloadButton
 from youtube.gui.util.CustomizedCheckBox import NumberedCheckBox
 from youtube.gui.util.ClickableLabel import ClickableLabel
+from xml.dom import NotFoundErr
 
 
 
@@ -237,7 +238,7 @@ class Ui_MainWindow(object):
         self.textEdit_2 = QtGui.QTableWidget(self.scrollAreaWidgetContents_3)
         self.textEdit_2.setObjectName("textEdit_2")
         self.textEdit_2.setColumnCount(3)
-        self.textEdit_2.setRowCount(1)
+        self.textEdit_2.setRowCount(1)        
         #Set column width
         self.textEdit_2.setColumnWidth(0, 90)
         self.textEdit_2.setColumnWidth(1, 225)
@@ -313,7 +314,11 @@ class Ui_MainWindow(object):
         self.scrollArea_tab33.setWidget(self.scrollAreaWidgetContents_tab33)
         self.horizontalLayout_tab337.addWidget(self.scrollArea_tab33)
         self.tabWidget.addTab(self.tab_33, QtGui.QIcon(QtCore.QString("./resources/progress.gif")), "")
-#        #End addition of tab 3
+        #End addition of tab 3
+        #Tooltips
+        self.tabWidget.setTabToolTip(0, "Displays Application Logs")
+        self.tabWidget.setTabToolTip(1, "Have a youtube video link? Use them here..")
+        self.tabWidget.setTabToolTip(2, "Displas Mutiple Downloads")
         self.pushButton_4 = QtGui.QPushButton(self.groupBox_6)
         self.pushButton_4.setGeometry(QtCore.QRect(270, 270, 75, 23))
         self.pushButton_4.setObjectName("pushButton_4")
@@ -441,7 +446,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+         
     def createActiveDownloadItem(self, text):
         self.textEdit_tab33.insertRow(self.textEdit_tab33.rowCount())
         lbl= QtGui.QLabel(text)
