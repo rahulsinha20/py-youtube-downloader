@@ -17,7 +17,7 @@ from youtube.gui.util.CustomizedDirectDownloadButton import CustomizedDirectDown
 from youtube.gui.util.CustomizedCheckBox import NumberedCheckBox
 from youtube.gui.util.ClickableLabel import ClickableLabel
 from xml.dom import NotFoundErr
-
+from youtube.gui.components import LibraryFileWidgetTree
 
 
 class Ui_MainWindow(object):
@@ -191,8 +191,9 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 329, 576))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.horizontalLayout_2 = QtGui.QHBoxLayout(self.scrollAreaWidgetContents)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.treeWidget = QtGui.QTreeWidget(self.scrollAreaWidgetContents)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2") 
+#        self.treeWidget = QtGui.QTreeWidget(self.scrollAreaWidgetContents)
+        self.treeWidget = LibraryFileWidgetTree.LibraryFileWidgetTree(self.scrollAreaWidgetContents)
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.headerItem().setText(0, "")
         self.horizontalLayout_2.addWidget(self.treeWidget)
