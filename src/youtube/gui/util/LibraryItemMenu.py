@@ -17,9 +17,28 @@ class LibraryItemMenu(QtGui.QMenu):
         QtGui.QMenu.__init__(self, parent)
         #Store a reference to clickable label that invoked me
         self.parentWidget = parent
+        self.configureMenuItems(True, False)
+    def configureMenuItems(self,isRoot=False, isFolder=False):
+        if isRoot:
+            #This is the root node, show options for root
+            self.changeLibraryFolderAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&Change Library Folder'))
+            self.expandAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&Expand'))
+            self.collapseAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&Collapse'))
+            QtCore.QObject.connect(self.changeLibraryFolderAction, QtCore.SIGNAL("triggered()"), self.changeLibraryFolderActionSlot)
+            QtCore.QObject.connect(self.expandAction, QtCore.SIGNAL("triggered()"), self.expandActionSlot)
+            QtCore.QObject.connect(self.collapseAction, QtCore.SIGNAL("triggered()"), self.collapseActionSlot)
+#        self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
+#        self.downloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/download.png")),self.tr('&Download'))
+#        QtCore.QObject.connect(self.viewAction, QtCore.SIGNAL("triggered()"), self.viewMenuItemClickedSlot)
+        
         #Check if this item is queued for download
 #        self.isQueuedForDownload()
-        
+    def changeLibraryFolderActionSlot(self):
+        return
+    def expandActionSlot(self):
+        self.parentWidget.expandAll()  
+    def collapseActionSlot(self):
+        self.parentWidget.collapseAll() 
     def isQueuedForDownload(self):
         '''
         Disables Download menu item if this item has already been queued
