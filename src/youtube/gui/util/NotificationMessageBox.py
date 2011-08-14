@@ -19,7 +19,7 @@ class NotificationMessageBox(QtGui.QMessageBox):
         self.setStandardButtons(QtGui.QMessageBox.Save | QtGui.QMessageBox.Discard | QtGui.QMessageBox.Cancel);
         self.stimer = QtCore.QTimer()
         QtCore.QObject.connect(self.stimer, QtCore.SIGNAL("timeout()"), self.constantUpdate)
-        self.stimer.start(1000)
+        self.stimer.start(15000)
     def constantUpdate(self):
         """
         Slot for singleShot timer timeout

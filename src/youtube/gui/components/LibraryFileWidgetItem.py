@@ -30,3 +30,6 @@ class LibraryFileWidgetItem(QtGui.QTreeWidgetItem):
         Returns queued status for the file
         '''
         return self.queuedStatus
+    def mousePressEvent(self, mouseEvent):
+        print 'mouse clicked'
+        print self
