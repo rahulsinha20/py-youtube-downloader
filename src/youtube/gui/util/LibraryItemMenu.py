@@ -20,11 +20,13 @@ class LibraryItemMenu(QtGui.QMenu):
         #check if the event is originating from the tree root
         if text == 'Video Library':
             self.configureMenuItems(True, False)
+        #Check if the parent folder for this item is not Video Library
+         
         elif childCount==0:
-            self.configureMenuItems(False, True)
+            self.configureMenuItems(False, True, False)
         else:
-            self.configureMenuItems(False, False)
-    def configureMenuItems(self,isRoot=False, isFolder=False):
+            self.configureMenuItems(False, False, True)
+    def configureMenuItems(self,isRoot=False, isFolderOnly=False, isVideoItem=False):
         if isRoot:
             #This is the root node, show options for root
             self.changeLibraryFolderAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&Change Library Folder'))
@@ -33,8 +35,17 @@ class LibraryItemMenu(QtGui.QMenu):
             QtCore.QObject.connect(self.changeLibraryFolderAction, QtCore.SIGNAL("triggered()"), self.changeLibraryFolderActionSlot)
             QtCore.QObject.connect(self.expandAction, QtCore.SIGNAL("triggered()"), self.expandActionSlot)
             QtCore.QObject.connect(self.collapseAction, QtCore.SIGNAL("triggered()"), self.collapseActionSlot)
-        elif isFolder:
+        elif isFolderOnly:
+            #If its a folder and number of children = 0, show delete option
             self.renameFolder = self.addAction(QtGui.QIcon(QtCore.QString("./resources/RenameFolder.gif")),self.tr('&Rename Folder'))
+            self.deleteFolder = self.addAction(QtGui.QIcon(QtCore.QString("./resources/DeleteFolder.png")),self.tr('&Delete Folder'))
+        elif isVideoItem:
+            #Check if this item has been already queued
+            self.playVideo = self.addAction(QtGui.QIcon(QtCore.QString("./resources/RenameFolder.gif")),self.tr('&Play'))
+            self.renameVideo = self.addAction(QtGui.QIcon(QtCore.QString("./resources/RenameFolder.gif")),self.tr('&Rename'))
+            self.deleteVideo = self.addAction(QtGui.QIcon(QtCore.QString("./resources/DeleteFolder.png")),self.tr('&Delete'))
+#        elif !isFolderOnly and isVideoItem:
+            
 #        self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
 #        self.downloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/download.png")),self.tr('&Download'))
 #        QtCore.QObject.connect(self.viewAction, QtCore.SIGNAL("triggered()"), self.viewMenuItemClickedSlot)

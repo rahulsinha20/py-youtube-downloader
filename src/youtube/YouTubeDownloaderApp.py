@@ -57,7 +57,7 @@ class StartMainWidget(QtGui.QMainWindow):
             self.updateVideoLibrary()
         self.videoList = {}
         #Context Menu on right clicking Tree Widget
-        self.ui.treeWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+#        self.ui.treeWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 #        self.connect(self.ui.treeWidget,QtCore.SIGNAL('customContextMenuRequested(QPoint)'),
 #                     self.newContext)
         #Signal for double clicking (playback) a video track from library
