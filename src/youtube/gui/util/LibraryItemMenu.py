@@ -10,14 +10,20 @@ class LibraryItemMenu(QtGui.QMenu):
     '''
 
 
-    def __init__(self, parent = None):
+    def __init__(self,text, childCount, parent = None):
         '''
         Creates an instance of QMenu
         '''
         QtGui.QMenu.__init__(self, parent)
         #Store a reference to clickable label that invoked me
         self.parentWidget = parent
-        self.configureMenuItems(True, False)
+        #check if the event is originating from the tree root
+        if text == 'Video Library':
+            self.configureMenuItems(True, False)
+        elif childCount==0:
+            self.configureMenuItems(False, True)
+        else:
+            self.configureMenuItems(False, False)
     def configureMenuItems(self,isRoot=False, isFolder=False):
         if isRoot:
             #This is the root node, show options for root
@@ -27,6 +33,8 @@ class LibraryItemMenu(QtGui.QMenu):
             QtCore.QObject.connect(self.changeLibraryFolderAction, QtCore.SIGNAL("triggered()"), self.changeLibraryFolderActionSlot)
             QtCore.QObject.connect(self.expandAction, QtCore.SIGNAL("triggered()"), self.expandActionSlot)
             QtCore.QObject.connect(self.collapseAction, QtCore.SIGNAL("triggered()"), self.collapseActionSlot)
+        elif isFolder:
+            self.renameFolder = self.addAction(QtGui.QIcon(QtCore.QString("./resources/RenameFolder.gif")),self.tr('&Rename Folder'))
 #        self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
 #        self.downloadAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/download.png")),self.tr('&Download'))
 #        QtCore.QObject.connect(self.viewAction, QtCore.SIGNAL("triggered()"), self.viewMenuItemClickedSlot)

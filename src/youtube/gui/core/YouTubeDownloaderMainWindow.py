@@ -193,7 +193,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QtGui.QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2") 
 #        self.treeWidget = QtGui.QTreeWidget(self.scrollAreaWidgetContents)
-        self.treeWidget = LibraryFileWidgetTree.LibraryFileWidgetTree(self.scrollAreaWidgetContents)
+        #Create a tree widget by passing the UI controller
+        self.treeWidget = LibraryFileWidgetTree.LibraryFileWidgetTree(self.scrollAreaWidgetContents, self.UILauncher)
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.headerItem().setText(0, "")
         self.horizontalLayout_2.addWidget(self.treeWidget)

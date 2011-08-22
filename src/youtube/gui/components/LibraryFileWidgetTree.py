@@ -11,11 +11,12 @@ class LibraryFileWidgetTree(QTreeWidget):
     '''
 
 
-    def __init__(self, parent  = None):
+    def __init__(self, parent , controller):
         '''
         Constructor - calls parent class constructor
         '''
         QTreeWidget.__init__(self, parent)
+        self.parentController = parent
         
     def contextMenuEvent(self, event): 
          if event.reason() == event.Mouse: 
@@ -45,7 +46,8 @@ class LibraryFileWidgetTree(QTreeWidget):
                  itemrect.setWidth(portrect.width()) 
                  pos = self.mapToGlobal(itemrect.center()) 
          if pos is not None: 
-             menu = LibraryItemMenu.LibraryItemMenu(self) 
+             childCount = item.childCount()
+             menu = LibraryItemMenu.LibraryItemMenu(item.text(0),childCount,self) 
              menu.addAction(item.text(0)) 
              menu.popup(pos) 
          event.accept() 
