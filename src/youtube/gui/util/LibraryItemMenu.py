@@ -10,22 +10,24 @@ class LibraryItemMenu(QtGui.QMenu):
     '''
 
 
-    def __init__(self,text, childCount, parent = None):
+    def __init__(self,item, parent = None):
         '''
         Creates an instance of QMenu
         '''
         QtGui.QMenu.__init__(self, parent)
         #Store a reference to clickable label that invoked me
         self.parentWidget = parent
+        #Also a reference to the tree widget item
+        self.libraryTreeItem = item        
         #check if the event is originating from the tree root
-        if text == 'Video Library':
-            self.configureMenuItems(True, False)
-        #Check if the parent folder for this item is not Video Library
-         
-        elif childCount==0:
-            self.configureMenuItems(False, True, False)
+        if item.text(0) == 'Video Library':
+            self.configureMenuItems(True) #Root folder
         else:
-            self.configureMenuItems(False, False, True)
+            
+            if item.parent().text(0) == 'Video Library' and item.childCount()>=0:
+                self.configureMenuItems(False, True) #Not a root node but a folder with no media files            
+            else:
+                self.configureMenuItems(False, False, True)
     def configureMenuItems(self,isRoot=False, isFolderOnly=False, isVideoItem=False):
         if isRoot:
             #This is the root node, show options for root
@@ -40,10 +42,15 @@ class LibraryItemMenu(QtGui.QMenu):
             self.renameFolder = self.addAction(QtGui.QIcon(QtCore.QString("./resources/RenameFolder.gif")),self.tr('&Rename Folder'))
             self.deleteFolder = self.addAction(QtGui.QIcon(QtCore.QString("./resources/DeleteFolder.png")),self.tr('&Delete Folder'))
         elif isVideoItem:
+            self.playVideoAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/PlayButton.png")),self.tr('&Play'))
             #Check if this item has been already queued
-            self.playVideo = self.addAction(QtGui.QIcon(QtCore.QString("./resources/RenameFolder.gif")),self.tr('&Play'))
+            if self.libraryTreeItem.getQueuedStatus()== True:
+                self.playVideoAction.setEnabled(False)
+            else:
+                self.playVideoAction.setEnabled(True)
             self.renameVideo = self.addAction(QtGui.QIcon(QtCore.QString("./resources/RenameFolder.gif")),self.tr('&Rename'))
             self.deleteVideo = self.addAction(QtGui.QIcon(QtCore.QString("./resources/DeleteFolder.png")),self.tr('&Delete'))
+            QtCore.QObject.connect(self.playVideoAction, QtCore.SIGNAL("triggered()"), self.playVideoActionSlot)
 #        elif !isFolderOnly and isVideoItem:
             
 #        self.viewAction = self.addAction(QtGui.QIcon(QtCore.QString("./resources/view.gif")),self.tr('&View'))
@@ -52,6 +59,10 @@ class LibraryItemMenu(QtGui.QMenu):
         
         #Check if this item is queued for download
 #        self.isQueuedForDownload()
+    def playVideoActionSlot(self):
+        print 'Play video'
+        #Get UI Controller
+        self.parentWidget.parentController.playVideoForLibraryItem(self.libraryTreeItem)
     def changeLibraryFolderActionSlot(self):
         return
     def expandActionSlot(self):

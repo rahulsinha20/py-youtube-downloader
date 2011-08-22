@@ -46,8 +46,6 @@ class LibraryFileWidgetTree(QTreeWidget):
                 itemrect.setWidth(portrect.width()) 
                 pos = self.mapToGlobal(itemrect.center()) 
         if pos is not None: 
-            childCount = item.childCount()
-            menu = LibraryItemMenu.LibraryItemMenu(item.text(0),childCount,self) 
-            menu.addAction(item.text(0)) 
+            menu = LibraryItemMenu.LibraryItemMenu(item,self)             
             menu.popup(pos) 
         event.accept() 

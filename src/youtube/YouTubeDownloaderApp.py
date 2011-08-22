@@ -354,6 +354,56 @@ class StartMainWidget(QtGui.QMainWindow):
             widgetItem = widgetItem.parent()
             ret = self.__recursiveSearch__(widgetItem)
             return ret
+    def playVideoForLibraryItem(self, selectedLibraryTreeWidgetItem):
+        '''
+        This is the slot that plays the video by invoking an external media player
+        instance. It also checks if the video entry is already not queued.
+        '''
+        #Check if media player is enabled
+        if (self.ui.MediaPlayerState=='false'):
+            self.log.info('No Media Player is selected. Use Settings Menu to set a player')
+            return
+        
+        self.tokenList = []
+        self.recursivePath = ""
+        #Now we need to recursively traverse till we reach the root
+        
+        #get the current widget item
+        self.__recursiveSearch__(selectedLibraryTreeWidgetItem)
+        #Now from the token list reading backwards form the complete path
+        completePath = self.libraryPath
+        for tokenText in reversed(self.tokenList):
+            completePath += "/" + tokenText
+        self.log.info("Playback path:" + completePath) 
+        #Check if the video is not already queued
+        if selectedLibraryTreeWidgetItem.getQueuedStatus() == False:
+            #Change text color
+            selectedLibraryTreeWidgetItem.setTextColor(0, QtGui.QColor("blue"))
+            #Also change its state
+            selectedLibraryTreeWidgetItem.setQueuedStatus(True)
+            #Added for multi playback of all the nodes if the parent is clicked
+            #Get the number of children
+            childrenCount = selectedLibraryTreeWidgetItem.childCount()
+            if childrenCount > 0:
+                #Iterate through all the children and make their icon to state play
+                for i in range (0, childrenCount):
+                    #Get the child item
+                    childNode = selectedLibraryTreeWidgetItem.child(i)
+                    #Change its icon
+                    childNode.setIcon(0, QtGui.QIcon(QtCore.QString("./resources/playVideo.gif")))
+                    #And also the font color
+                    childNode.setTextColor(0, QtGui.QColor("blue"))
+                #Also keep the nodes expanded
+                selectedLibraryTreeWidgetItem.setExpanded(True)
+                #Hack here - call the tree widget to expand all
+#                self.sender().currentItem().treeWidget().expandAll()
+            completePath = completePath.replace('/', '\\')
+            self.log.info("Path:" + completePath)
+            #Change the icon for this node indicating it is queued
+            selectedLibraryTreeWidgetItem.setIcon(0, QtGui.QIcon(QtCore.QString("./resources/playVideo.gif")))
+            #Begin Playback
+            VlcPlayer(self,completePath, self.vlcPath)
+
         
     def playVideo(self):
         '''
