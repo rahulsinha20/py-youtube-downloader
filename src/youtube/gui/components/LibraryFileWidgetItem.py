@@ -19,7 +19,7 @@ class LibraryFileWidgetItem(QtGui.QTreeWidgetItem):
         QtGui.QTreeWidgetItem.__init__(self, stringList)
         #Assign this as not queued/playing
         self.setQueuedStatus(False)
-        self.setFlags(PyQt4.QtCore.Qt.ItemIsEditable|PyQt4.QtCore.Qt.ItemIsEnabled|PyQt4.QtCore.Qt.ItemIsSelectable)
+        self.setFlags(PyQt4.QtCore.Qt.ItemIsEditable|self.flags())
         
     def setQueuedStatus(self, queued):
         '''
