@@ -4,6 +4,7 @@ Represents an item in the library tree widget
 @author: Rahul Sinha
 '''
 from PyQt4 import QtGui
+import PyQt4
 class LibraryFileWidgetItem(QtGui.QTreeWidgetItem):
     '''
     This class represents a file in the library. It has a text indicating
@@ -18,6 +19,7 @@ class LibraryFileWidgetItem(QtGui.QTreeWidgetItem):
         QtGui.QTreeWidgetItem.__init__(self, stringList)
         #Assign this as not queued/playing
         self.setQueuedStatus(False)
+        self.setFlags(PyQt4.QtCore.Qt.ItemIsEditable|PyQt4.QtCore.Qt.ItemIsEnabled|PyQt4.QtCore.Qt.ItemIsSelectable)
         
     def setQueuedStatus(self, queued):
         '''
