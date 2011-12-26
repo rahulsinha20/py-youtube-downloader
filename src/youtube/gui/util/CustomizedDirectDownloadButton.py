@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 '''
 Created on 27/11/2010
 

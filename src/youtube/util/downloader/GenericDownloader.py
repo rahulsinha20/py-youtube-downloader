@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 '''
 Created on 23/12/2010
 Source: http://rg3.github.com/youtube-dl/

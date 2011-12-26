@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 '''
 Created on Jul 31, 2011
 Represents a Menu when the user right clicks on a video

@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'SettingsDialog.ui'

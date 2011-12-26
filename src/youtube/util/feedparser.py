@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 #!/usr/bin/env python
 """Universal feed parser
 

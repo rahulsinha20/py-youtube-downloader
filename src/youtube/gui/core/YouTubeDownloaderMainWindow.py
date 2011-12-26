@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'VideoDownloader.ui'
@@ -69,6 +70,8 @@ class Ui_MainWindow(object):
         self.UILauncher = MainWindow
         self.ActiveDownloadItemTable = {}
         self.activeDownloadRowCounter = 0
+        #Set widget for direct download link
+        self.textEdit_2 = None
         #set flags to indicate state for embedded videos
         self.EmbeddedVideoState = self.UILauncher.properties.getEmbeddedVideosEnabled()
         #set flags to indicate whether media player is enabled
@@ -236,35 +239,8 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.horizontalLayout_6 = QtGui.QHBoxLayout(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        #QTableWidget
-        self.textEdit_2 = QtGui.QTableWidget(self.scrollAreaWidgetContents_3)
-        self.textEdit_2.setObjectName("textEdit_2")
-        self.textEdit_2.setColumnCount(3)
-        self.textEdit_2.setRowCount(1)        
-        #Set column width
-        self.textEdit_2.setColumnWidth(0, 90)
-        self.textEdit_2.setColumnWidth(1, 225)
-        self.textEdit_2.setColumnWidth(2, 40)
-        self.headerList = QtCore.QStringList()
-        self.headerList.append('Title')
-        self.headerList.append('Link')
-        self.headerList.append('Add')
-        self.textEdit_2.setHorizontalHeaderLabels(self.headerList)
-        self.textEdit_2.verticalHeader().hide()
-       
-        #Create a list of QPUshButtons
-        self.listOfDirectLinkButtons = []
-        self.directDownloadLinkButtonCounter = 0
-        addLinkButton = CustomizedDirectDownloadButton(self.directDownloadLinkButtonCounter)
-        addLinkButton.setFlat(True)
-        addLinkButton.setAutoFillBackground(True)
-        addLinkButton.setIcon(QtGui.QIcon(QtCore.QString("./resources/add.gif")))
-        self.textEdit_2.setCellWidget(self.directDownloadLinkButtonCounter, 2, addLinkButton)
-        self.directDownloadLinkButtonCounter = self.directDownloadLinkButtonCounter + 1
-        #For direct download link
-        QtCore.QObject.connect(addLinkButton, QtCore.SIGNAL("clicked()"), MainWindow.directDownloadSlot)
-        self.listOfDirectLinkButtons.append(addLinkButton)
-        self.horizontalLayout_6.addWidget(self.textEdit_2)
+       #Set Widget for direct download
+        self.createWidgetForDirectDownloadLinks()
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_7.addWidget(self.scrollArea_3)
         self.tabWidget.addTab(self.tab_2, QtGui.QIcon(QtCore.QString("./resources/directVideoLink.gif")), "")
@@ -298,20 +274,20 @@ class Ui_MainWindow(object):
         self.textEdit_tab33.verticalHeader().hide()
 #        
 #TEST
-        testButton = QtGui.QPushButton()
-        testButton.setFlat(True)
-        testButton.setAutoFillBackground(True)
-        testButton.setIcon(QtGui.QIcon(QtCore.QString("./resources/cancelDownload.png")))
-        self.textEdit_tab33.setCellWidget(0, 2, testButton)
-        progressMainStyle2 = """
-            QProgressBar {
-                text-align: center;                
-            }"""
-        progressBar2 = QtGui.QProgressBar()
-        progressBar2.setMaximum(100)
-        progressBar2.setValue(75)
-        progressBar2.setStyleSheet(progressMainStyle2)
-        self.textEdit_tab33.setCellWidget(0, 1, progressBar2)
+#        testButton = QtGui.QPushButton()
+#        testButton.setFlat(True)
+#        testButton.setAutoFillBackground(True)
+#        testButton.setIcon(QtGui.QIcon(QtCore.QString("./resources/cancelDownload.png")))
+#        self.textEdit_tab33.setCellWidget(0, 2, testButton)
+#        progressMainStyle2 = """
+#            QProgressBar {
+#                text-align: center;                
+#            }"""
+#        progressBar2 = QtGui.QProgressBar()
+#        progressBar2.setMaximum(100)
+#        progressBar2.setValue(75)
+#        progressBar2.setStyleSheet(progressMainStyle2)
+#        self.textEdit_tab33.setCellWidget(0, 1, progressBar2)
         self.horizontalLayout_tab33.addWidget(self.textEdit_tab33)
         self.scrollArea_tab33.setWidget(self.scrollAreaWidgetContents_tab33)
         self.horizontalLayout_tab337.addWidget(self.scrollArea_tab33)
@@ -449,6 +425,43 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
          
+    def createWidgetForDirectDownloadLinks(self):
+        '''
+        Creates a list box for direct download links
+        '''
+        #Remove old widgets if any
+        if (self.textEdit_2 is not None):
+            self.horizontalLayout_6.removeWidget(self.textEdit_2)
+         #QTableWidget
+        self.textEdit_2 = QtGui.QTableWidget(self.scrollAreaWidgetContents_3)
+        self.textEdit_2.setObjectName("textEdit_2")
+        self.textEdit_2.setColumnCount(3)
+        self.textEdit_2.setRowCount(1)        
+        #Set column width
+        self.textEdit_2.setColumnWidth(0, 90)
+        self.textEdit_2.setColumnWidth(1, 225)
+        self.textEdit_2.setColumnWidth(2, 40)
+        self.headerList = QtCore.QStringList()
+        self.headerList.append('Title')
+        self.headerList.append('Link')
+        self.headerList.append('Add')
+        self.textEdit_2.setHorizontalHeaderLabels(self.headerList)
+        self.textEdit_2.verticalHeader().hide()
+       
+        #Create a list of QPUshButtons
+        self.listOfDirectLinkButtons = []
+        self.directDownloadLinkButtonCounter = 0
+        addLinkButton = CustomizedDirectDownloadButton(self.directDownloadLinkButtonCounter)
+        addLinkButton.setFlat(True)
+        addLinkButton.setAutoFillBackground(True)
+        addLinkButton.setIcon(QtGui.QIcon(QtCore.QString("./resources/add.gif")))
+        self.textEdit_2.setCellWidget(self.directDownloadLinkButtonCounter, 2, addLinkButton)
+        self.directDownloadLinkButtonCounter = self.directDownloadLinkButtonCounter + 1
+        #For direct download link
+        QtCore.QObject.connect(addLinkButton, QtCore.SIGNAL("clicked()"), self.UILauncher.directDownloadSlot)
+        self.listOfDirectLinkButtons.append(addLinkButton)
+        self.horizontalLayout_6.addWidget(self.textEdit_2)
+        
     def createActiveDownloadItem(self, text):
         self.textEdit_tab33.insertRow(self.textEdit_tab33.rowCount())
         lbl= QtGui.QLabel(text)
@@ -486,7 +499,7 @@ class Ui_MainWindow(object):
         self.comboBox.addItems(comboBoxEntries)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "YouTube Video Downloader v2.0", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "YouTube Video Downloader v2.0.1", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("MainWindow", "Videos", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("MainWindow", "Search Criteria", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_2.setText(QtGui.QApplication.translate("MainWindow", "Reset", None, QtGui.QApplication.UnicodeUTF8))
@@ -587,21 +600,14 @@ class Ui_MainWindow(object):
             self.pushButtonArray.append(QtGui.QPushButton())
         self.acquireImages()
                 
-    def clear(self):
-        '''Clears component texts to default'''
-#        (self.plainTextEdit).clear()
-#        (self.plainTextEdit_2).clear()
-#        (self.label_13).setText("Not Applicable")
 
     def acquireImages(self):
-#        self.j=0
-#        for link in self.thumbLinks:
         for video in self.videoList:
             link = video.getThumbnails()
             self.UILauncher.log.info('Acquiring Image:' + link);
             url = QtCore.QUrl(link)
             self.netManager.get (QtNetwork.QNetworkRequest (url))
-        #self.gridLayoutWidget.update()
+
     def clearWidgetsFromLayout(self):
             self.UILauncher.clearVideoList()
 #            self.UILauncher.clearDownloadVideoStatus()
@@ -623,7 +629,7 @@ class Ui_MainWindow(object):
                         # Just remove does not work we need to call setParent None to each
                         self.checkBoxesArray[i].setParent(None)
                         self.labelArray[i].setParent(None)
-                self.clear() # Will clear the component texts to default
+#                self.clear() # Will clear the component texts to default
 
     def handleNetworkData (self, netReply):
         #qDebug (QString ("Received %1 bytes").arg (netReply.size ()))

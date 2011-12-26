@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 '''
 Created on Oct 31, 2010
 Taken from: http://old.nabble.com/logging.Handler-not-working-with-QThreads-td22214831.html

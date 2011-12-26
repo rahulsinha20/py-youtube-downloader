@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 '''
 Created on Jun 29, 2009
 This is my first attempt with OO Python!

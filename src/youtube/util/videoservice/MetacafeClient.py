@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 '''
 Created on 02/12/2010
 Accessing attributes refer: http://diveintopython.org/xml_processing/attributes.html

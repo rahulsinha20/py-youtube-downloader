@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 '''
 Created on 04/12/2010
 Daily motion client

@@ -1,3 +1,4 @@
+'''Testing License v0.1'''
 '''
 Created on Jun 30, 2009
 This is the main UI Launcher class which displays the UI and also acts as the controller
@@ -15,6 +16,7 @@ import youtube.util.xml.PropertiesAccessor
 from youtube.log.CustomLoggingHandler import QtStreamHandler
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QString
+from youtube.gui.components import ConfirmDialog
 from youtube.gui.core.YouTubeDownloaderMainWindow import Ui_MainWindow
 from youtube.util.VlcPlayer import VlcPlayer
 from youtube.util.videoservice.VideoSearch import VideoSearch
@@ -47,7 +49,7 @@ class StartMainWidget(QtGui.QMainWindow):
         self.loggingHandler = QtStreamHandler(self.ui.textEdit, self)
         #Add the text edit handler
         self.log.addHandler(self.loggingHandler)
-        self.log.info("YouTube Downloader version 2.0 Started...")
+        self.log.info("YouTube Downloader version 2.0.1 Started...Updated Dec 2011")
         #Check if there was a valid configuration file found
         if returnCode == -1:
             #No Configuration file found
@@ -220,7 +222,10 @@ class StartMainWidget(QtGui.QMainWindow):
         (self.ui.progressBar).setValue(0)
         (self.ui.lineEdit).setText("")
         (self.ui.textEdit).clear()
+        #Clear direct download widget
         (self.ui.textEdit_2).clear()
+        #Re-create this widget
+        self.ui.createWidgetForDirectDownloadLinks()
         (self.ui.clearWidgetsFromLayout())
         self.ui.addDefaultPic()
         self.clearDownloadVideoStatus()
@@ -354,6 +359,50 @@ class StartMainWidget(QtGui.QMainWindow):
             widgetItem = widgetItem.parent()
             ret = self.__recursiveSearch__(widgetItem)
             return ret
+    def renameVideoForLibraryItem(self,selectedLibraryTreeWidgetItem):
+        '''
+        Slot for file rename
+        '''        
+        self.tokenList = []
+        self.recursivePath = ""
+        #get the current widget item
+        self.__recursiveSearch__(selectedLibraryTreeWidgetItem)
+        #Now from the token list reading backwards form the complete path
+        completePath = self.libraryPath
+        for tokenText in reversed(self.tokenList):
+            completePath += "/" + tokenText
+        
+        self.log.info("Item To Rename:" + completePath)
+        confirmDialog = ConfirmDialog.ConfirmDialog(self)
+        confirmDialog.showDialog(completePath)
+    def deleteVideoForLibraryItem(self,selectedLibraryTreeWidgetItem):
+        '''
+        Slot for deleting a library item
+        '''
+        self.tokenList = []
+        self.recursivePath = ""
+        #get the current widget item
+        self.__recursiveSearch__(selectedLibraryTreeWidgetItem)
+        #Now from the token list reading backwards form the complete path
+        completePath = self.libraryPath
+        for tokenText in reversed(self.tokenList):
+            completePath += "/" + tokenText
+        self.log.info("Item To Delete:" + completePath)
+        reply = QtGui.QMessageBox.question(self, 'Message',
+            'Do you want to delete:'+completePath, QtGui.QMessageBox.Yes | 
+            QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+
+        if reply == QtGui.QMessageBox.Yes:
+            print 'Delete OK'
+            try:
+                os.remove(str(completePath))
+            except Exception:
+                os.rmdir(str(completePath))
+            self.updateVideoLibrary()
+            
+#        confirmDialog = ConfirmDialog.ConfirmDialog()
+#        confirmDialog.showMessage('Do you want to delete:'+completePath)
+        
     def playVideoForLibraryItem(self, selectedLibraryTreeWidgetItem):
         '''
         This is the slot that plays the video by invoking an external media player
@@ -731,8 +780,7 @@ if __name__ == "__main__":
 #        sys.stdout = open('./Logs/Output.txt', 'w')
 #        sys.stderr = open('./Logs/Exceptions.txt', 'w') 
     except:
-        pass      
-    print "Running Video Download Assistant v2.1"
+        pass          
     app = QtGui.QApplication(sys.argv)
     #create the splash screen
     splash = QSplashScreen() 
