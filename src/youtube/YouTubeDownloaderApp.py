@@ -716,7 +716,12 @@ class StartMainWidget(QtGui.QMainWindow):
             QtCore.QObject.connect(self.obj, QtCore.SIGNAL('add_item_to_active_downloads(QString)'), self.addItemToActiveDownload)
             #Videos completed signal
             QtCore.QObject.connect(self.obj, QtCore.SIGNAL('video_downloaded(int)'), self.downloadVideosCompletedUpdate)
+            QtCore.QObject.connect(self.obj, QtCore.SIGNAL('start()'), self.obj.run)
             self.obj.start()
+#            try:
+#                self.obj.emit(QtCore.SIGNAL("start()") )
+#            except Exception:
+#                pass
             #Also disable download button
             self.ui.pushButton_4.setEnabled(False)
         else:
