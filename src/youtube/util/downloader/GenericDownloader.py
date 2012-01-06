@@ -673,9 +673,9 @@ class FileDownloader(object):
         if (int(float(percent_str)) >= 99):
             print "Download Complete"
             #Close stds
-            sys.stderr.flush()
-            sys.stdout.flush()
-            sys.stdin.flush()
+#            sys.stderr.flush()
+#            sys.stdout.flush()
+#            sys.stdin.flush()
             #Emit a signal to be captured by the controller
             self.parentSingularThread.parentControllerThread.emit(QtCore.SIGNAL('download_completed()'))
             self.parentSingularThread.parentControllerThread.emit(QtCore.SIGNAL('video_downloaded(int)'), self.parentSingularThread.parentControllerThread.videoDownloadCounter)
@@ -724,6 +724,7 @@ class FileDownloader(object):
 
     def report_finish(self):
         """Report download finished."""
+        print 'Finished Downloading'
         if self.params.get('noprogress', False):
             self.to_screen(u'[download] Download completed')
         else:
@@ -847,10 +848,11 @@ class FileDownloader(object):
                 except (ContentTooShortError, ), err:
                     self.trouble(u'ERROR: content too short (expected %s bytes and served %s)' % (err.expected, err.downloaded))
                     return
-    
+            print "Success:",success
             if success:
                 try:
-                    self.post_process(filename, info_dict)
+                    print ''
+#                    self.post_process(filename, info_dict)
                 except (PostProcessingError), err:
                     self.trouble(u'ERROR: postprocessing: %s' % str(err))
                     return
@@ -4389,7 +4391,7 @@ def _real_main(self,myPath):
     # Dump user agent
     if opts.dump_user_agent:
         print std_headers['User-Agent']
-        sys.exit(0)
+#        sys.exit(0)
 
     # Batch file verification
     batchurls = []
@@ -4423,7 +4425,7 @@ def _real_main(self,myPath):
             all_urls = filter(lambda url: url not in matchedUrls, all_urls)
             for mu in matchedUrls:
                 print(u'  ' + mu)
-        sys.exit(0)
+#        sys.exit(0)
 
     # Conflicting, missing and erroneous options
     if opts.usenetrc and (opts.username is not None or opts.password is not None):
@@ -4523,8 +4525,8 @@ def _real_main(self,myPath):
     if len(all_urls) < 1:
         if not opts.update_self:
             parser.error(u'you must provide at least one URL')
-        else:
-            sys.exit()
+#        else:
+#            sys.exit()
     
     try:
         retcode = fd.download(all_urls)
@@ -4539,7 +4541,7 @@ def _real_main(self,myPath):
         except (IOError, OSError), err:
             sys.exit(u'ERROR: unable to save cookie jar')
 
-    sys.exit(retcode)
+#    sys.exit(retcode)
 
 #def main():
 #    try:
@@ -4602,6 +4604,7 @@ class NewDownloader(QThread):
             # Create a new thread            
 
             thread = SingularThread(self,urlListing2,self.tempTitleListing[self.videoDownloadCounter],self.videoDownloadCounter)
+            thread.start()
             QtCore.QObject.connect(thread, QtCore.SIGNAL('start()'), thread.run)
             
             thread.emit(QtCore.SIGNAL("start()") )
