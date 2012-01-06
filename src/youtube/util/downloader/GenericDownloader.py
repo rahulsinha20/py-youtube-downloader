@@ -4605,9 +4605,9 @@ class NewDownloader(QThread):
 
             thread = SingularThread(self,urlListing2,self.tempTitleListing[self.videoDownloadCounter],self.videoDownloadCounter)
             thread.start()
-            QtCore.QObject.connect(thread, QtCore.SIGNAL('start()'), thread.run)
-            
-            thread.emit(QtCore.SIGNAL("start()") )
+#            QtCore.QObject.connect(thread, QtCore.SIGNAL('start()'), thread.run)
+#            
+#            thread.emit(QtCore.SIGNAL("start()") )
            
             self.videoDownloadCounter = self.videoDownloadCounter + 1
 from PyQt4.QtCore import QThread                
