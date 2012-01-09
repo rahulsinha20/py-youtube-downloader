@@ -1069,7 +1069,7 @@ class FileDownloader(object):
         self.report_finish()
         if data_len is not None and byte_counter != data_len:
             raise ContentTooShortError(byte_counter, long(data_len))
-#        self.try_rename(tmpfilename, filename)
+        self.try_rename(tmpfilename, filename)
 
         # Update file modification time
         if self.params.get('updatetime', True):

@@ -275,16 +275,16 @@ class Ui_MainWindow(object):
         #QTableWidget
         self.textEdit_tab33 = QtGui.QTableWidget(self.scrollAreaWidgetContents_tab33)
         self.textEdit_tab33.setObjectName("textEdit_33")
-        self.textEdit_tab33.setColumnCount(3)
+        self.textEdit_tab33.setColumnCount(2)
         self.textEdit_tab33.setRowCount(1)
         #Set column width
-        self.textEdit_tab33.setColumnWidth(0, 90)
-        self.textEdit_tab33.setColumnWidth(1, 225)
-        self.textEdit_tab33.setColumnWidth(2, 40)
+        self.textEdit_tab33.setColumnWidth(0, 170)
+        self.textEdit_tab33.setColumnWidth(1, 185)
+#        self.textEdit_tab33.setColumnWidth(2, 40)
         self.headerList_tab33 = QtCore.QStringList()
         self.headerList_tab33.append('Title')
         self.headerList_tab33.append('Progress')
-        self.headerList_tab33.append('Stop')
+#        self.headerList_tab33.append('Stop')
         self.textEdit_tab33.setHorizontalHeaderLabels(self.headerList_tab33)
         self.textEdit_tab33.verticalHeader().hide()
 #        
@@ -478,6 +478,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.textEdit_2)
         
     def createActiveDownloadItem(self, text):
+        '''
+        Creates an active download item with text, progress bar and button
+        '''
         self.textEdit_tab33.insertRow(self.textEdit_tab33.rowCount())
         lbl= QtGui.QLabel(text)
         self.textEdit_tab33.setCellWidget(self.activeDownloadRowCounter, 0, lbl)
@@ -495,7 +498,7 @@ class Ui_MainWindow(object):
         btn.setAutoFillBackground(True)
         btn.setIcon(QtGui.QIcon(QtCore.QString("./resources/cancelDownload.png")))
         
-        self.textEdit_tab33.setCellWidget(self.activeDownloadRowCounter, 2, btn)
+#        self.textEdit_tab33.setCellWidget(self.activeDownloadRowCounter, 2, btn)
         obj = ActiveDownloadItem(lbl, progressBar2, btn)
         self.ActiveDownloadItemTable[self.activeDownloadRowCounter]=obj
         self.activeDownloadRowCounter=self.activeDownloadRowCounter+1

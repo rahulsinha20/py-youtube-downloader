@@ -726,8 +726,13 @@ class StartMainWidget(QtGui.QMainWindow):
             self.ui.pushButton_4.setEnabled(False)
         else:
             self.log.info("Downloader found nothing to download")
+            
     def addItemToActiveDownload(self, text):
+        '''
+        Adds an item to active download table
+        '''
         self.ui.createActiveDownloadItem(text)
+        
     def downloadVideosCompletedUpdate(self, value):
         '''
         Updates label with number of videos completed after a download
