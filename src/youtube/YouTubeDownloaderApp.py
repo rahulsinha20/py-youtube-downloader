@@ -165,8 +165,9 @@ class StartMainWidget(QtGui.QMainWindow):
                         os.rmdir(path)
                         #re-load video library
                         self.updateVideoLibrary()
-                    except OSError:
+                    except OSError, e:
                         self.log.fatal('Path is not empty!')
+                        self.showExceptionMessageBox(str(e))
                 else:
                     #This is a file
                     self.log.info('Full Path For File Deletion:' + path) 
@@ -174,8 +175,9 @@ class StartMainWidget(QtGui.QMainWindow):
                         os.remove(path)
                         #re-load video library
                         self.updateVideoLibrary()
-                    except WindowsError:
-                        self.log.fatal("The process cannot access the file because it is being used by another process:")               
+                    except WindowsError, e:
+                        self.log.fatal("The process cannot access the file because it is being used by another process:")
+                        self.showExceptionMessageBox(str(e))               
                 return True #indicating the event was consumed                
         return False #Let other filters process this event
     
@@ -411,8 +413,9 @@ class StartMainWidget(QtGui.QMainWindow):
             print 'Delete OK'
             try:
                 os.remove(str(completePath))
-            except Exception:
-                os.rmdir(str(completePath))
+            except Exception, e:
+#                os.rmdir(str(completePath))
+                self.showExceptionMessageBox(str(e))
             self.updateVideoLibrary()
             
 #        confirmDialog = ConfirmDialog.ConfirmDialog()
@@ -726,6 +729,16 @@ class StartMainWidget(QtGui.QMainWindow):
             self.ui.pushButton_4.setEnabled(False)
         else:
             self.log.info("Downloader found nothing to download")
+    def showExceptionMessageBox(self, message):
+        '''
+        Displays application exception
+        '''                               
+        reply = QtGui.QMessageBox.question(None, 'Exception Occurred',
+            message, QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
+        
+        
+            
+
             
     def addItemToActiveDownload(self, text):
         '''
@@ -741,15 +754,18 @@ class StartMainWidget(QtGui.QMainWindow):
         self.ui.labelDownloadStatus.setText(str(value) + ' Of ' + str(len(self.videoList)))
         #Check if we have downloaded all videos
         if value == len(self.videoList):
-            self.ui.pushButton_4.setEnabled(True)           
-            #Also reset all the checked boxes
-            for i in range(0, len(self.ui.checkBoxesArray)):
-                if self.ui.checkBoxesArray[i].checkState() == QtCore.Qt.Checked:
-                    self.ui.checkBoxesArray[i].setCheckState(QtCore.Qt.Unchecked)
+            self.ui.pushButton_4.setEnabled(True)
+            try:           
+                #Also reset all the checked boxes
+                for i in range(0, len(self.ui.checkBoxesArray)):
+                    if self.ui.checkBoxesArray[i].checkState() == QtCore.Qt.Checked:
+                        self.ui.checkBoxesArray[i].setCheckState(QtCore.Qt.Unchecked)
+            except:
+                pass
             #Also clear the videolist
             self.videoList.clear()
             self.ui.lineEdit_3.setText('')
-    
+           
     def downloadProgressUpdate(self, value, index):
         '''
         Update download progress bar
@@ -802,8 +818,8 @@ if __name__ == "__main__":
     try:
         if not os.path.exists('./Logs'):
             os.makedirs('./Logs')
-#        sys.stdout = open('./Logs/Output.txt', 'w')
-#        sys.stderr = open('./Logs/Exceptions.txt', 'w') 
+        sys.stdout = open('./Logs/Output.txt', 'w')
+        sys.stderr = open('./Logs/Exceptions.txt', 'w') 
     except:
         pass          
     app = QtGui.QApplication(sys.argv)

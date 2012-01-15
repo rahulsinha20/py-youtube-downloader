@@ -1,4 +1,9 @@
-31-07-2011:
+26th Dec 2011 -
+Added support for multiple downloads, improved ui with context menu on both resultant videos and media library.
+Added documentation for app walk-through
+Fixed minor bugs
+ 
+N31-07-2011:
 (1) Added QMenu when right clicked on the interface. 
 28-02-2010
 (1) Implementation of a Video class to store video details

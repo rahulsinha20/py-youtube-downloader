@@ -4628,10 +4628,23 @@ class SingularThread(QtCore.QThread):
             print 'Now downloading url:', self.urlListing2
             try:
                 _real_main(self,self.urlListing2)
-            except DownloadError:
-                sys.exit(1)
-            except SameFileError:
-                sys.exit(u'ERROR: fixed output name but more than one file to download')
-            except KeyboardInterrupt:
-                sys.exit(u'\nERROR: Interrupted by user')
+            except DownloadError, ex:
+                print 'downloader error', str(ex)
+                self.parentControllerThread.parent.showExceptionMessageBox(str(ex))
+                #Emit a signal to be captured by the controller
+                self.parentControllerThread.emit(QtCore.SIGNAL('download_completed()'))
+                self.parentControllerThread.emit(QtCore.SIGNAL('video_downloaded(int)'), self.parentControllerThread.videoDownloadCounter)
+#                sys.exit(1)
+            except SameFileError, ex:
+                 self.parentControllerThread.parent.showExceptionMessageBox(str(ex))
+                 #Emit a signal to be captured by the controller
+                 self.parentControllerThread.emit(QtCore.SIGNAL('download_completed()'))
+                 self.parentControllerThread.emit(QtCore.SIGNAL('video_downloaded(int)'), self.parentControllerThread.videoDownloadCounter)
+#                sys.exit(u'ERROR: fixed output name but more than one file to download')
+            except KeyboardInterrupt, ex:
+                 self.parentControllerThread.parent.showExceptionMessageBox(str(ex))
+                 #Emit a signal to be captured by the controller
+                 self.parentControllerThread.emit(QtCore.SIGNAL('download_completed()'))
+                 self.parentControllerThread.emit(QtCore.SIGNAL('video_downloaded(int)'), self.parentControllerThread.videoDownloadCounter)
+#                sys.exit(u'\nERROR: Interrupted by user')
 # vim: set ts=4 sw=4 sts=4 noet ai si filetype=python:
