@@ -1,4 +1,4 @@
-26-12 2011 -
+26-12 2011 
 (1) Added support for multiple downloads, improved ui with context menu on both resultant videos and media library.
 (2) Added documentation for app walk-through
 (3) Fixed minor bugs
