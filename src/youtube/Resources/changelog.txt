@@ -1,7 +1,8 @@
 26-12 2011 -
-Added support for multiple downloads, improved ui with context menu on both resultant videos and media library.
-Added documentation for app walk-through
-Fixed minor bugs
+(1) Added support for multiple downloads, improved ui with context menu on both resultant videos and media library.
+(2) Added documentation for app walk-through
+(3) Fixed minor bugs
+(4) Updated Google code page
  
 31-07-2011:
 (1) Added QMenu when right clicked on the interface. 
